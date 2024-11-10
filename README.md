@@ -22,6 +22,10 @@
 
 - `npm run build` — cборка стабильной версии
 
+# Ссылка
+
+[Netlify](https://praktikum-usmanov.netlify.app)
+
 # Команда
 
 - [Усманов Руслан](https://github.com/Danon29)
