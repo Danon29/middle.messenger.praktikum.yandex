@@ -16,7 +16,6 @@ Object.entries(Components).forEach(([name, template]) => {
 })
 
 function navigate(page: string) {
-  //@ts-ignore
   const [source, context] = pages[page]
   const container = document.getElementById('app')!
 
@@ -27,8 +26,7 @@ function navigate(page: string) {
 document.addEventListener('DOMContentLoaded', () => navigate('nav'))
 
 document.addEventListener('click', (e) => {
-  //@ts-ignore
-  const page = e.target.getAttribute('page')
+  const page = (e.target as HTMLElement).getAttribute('page')
   if (page) {
     navigate(page)
 
