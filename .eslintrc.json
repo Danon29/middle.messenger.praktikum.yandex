@@ -8,6 +8,7 @@
   "ignorePatterns": ["dist"],
   "parser": "@typescript-eslint/parser",
   "rules": {
-    "no-debugger": "off"
+    "no-debugger": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
   }
 }

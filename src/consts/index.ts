@@ -1,6 +1,6 @@
 import * as Pages from '../pages'
 
-export const pages = {
+export const pages: any = {
   errorPage404: [
     Pages.ErrorPage,
     {
