@@ -1,0 +1,23 @@
+<div class="user-page">
+    <div class="user-page__goback-btn">
+        {{> Button type="icon-filled" source="/public/icons/arrowLeft.svg" }}
+    </div>
+    <div class="user-page__content">
+        <div class="user-page__header">
+            <div>{{> Avatar size="big" clickable=true src=avatarUrl }}</div>
+            {{#if hasPageName}}
+                <span class="user-page__user-name">{{userName}}</span>
+            {{/if}}
+        </div>
+        <div class="user-page__body">
+            {{#each userInputs}}
+                {{> Input label=this.label type=this.type version="userPage" inputValue=this.value disabled=this.disabled}}
+            {{/each}}
+        </div>
+        <div class="user-page_buttons">
+            {{#each userProfileButtons }}
+                {{> Button type=this.type label=this.label textColor=this.textColor }}
+            {{/each}}
+        </div>
+    </div>
+</div>

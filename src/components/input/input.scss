@@ -1,0 +1,91 @@
+.input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 38px;
+  position: relative;
+
+
+  .input__element {
+    background-color: var(--primary);
+    outline: none;
+    border: none;
+    border-bottom: 2px solid #fff;
+  }
+
+  &__default {
+    .input__label {
+      transform: translateY(-28px);
+      font-size: 20px;
+      padding-left: 6px;
+      user-select: none;
+      transition: all 0.2s ease;
+      color: #878787;
+    }
+
+    .input__element {
+      width: 100%;
+      padding: 6px 0;
+      font-size: 18px;
+      transition: border-color 0.5s ease;
+      color: var(--text-color);
+    }
+
+    .input:focus {
+      border-color: var(--active);
+    }
+
+    .input__element:not(:placeholder-shown) + .input__label,
+    .input__element:focus + .input__label {
+      transform: translate(-5px ,-42px);
+      color: var(--active);
+      font-size: 12px;
+    }
+
+    .input__error {
+      color: var(--error);
+      font-size: 12px;
+      padding-bottom: 2px;
+      transform: translateY(-20px);
+      position: absolute;
+      top: 57px
+    }
+  }
+
+
+  &_userPage {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 4px;
+    border-bottom: none;
+    border-bottom: 2px solid #fff;
+    min-width: 30rem;
+
+    .input__label {
+      font-weight: bold;
+      color: #878787;
+      transform: none;
+      padding-top: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .input__element {
+      text-align: right;
+      font-size: 1rem;
+      border-bottom: none;
+      color: var(--text-color);
+      padding-top: 0.5rem;
+    }
+
+    &__element:not(:placeholder-shown) + &__label,
+    &__element:focus + &__label {
+      transform: none;
+      color: var(--active);
+      font-size: 12px;
+    }
+  }
+}
+
+
+

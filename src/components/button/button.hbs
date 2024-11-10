@@ -1,0 +1,10 @@
+<button class="button button_{{type}}
+  {{#if textColor}}button_textColor_{{textColor}} {{/if}}
+  {{#if buttonSize}}button_fontSize_{{buttonSize}}{{/if}}">
+
+  {{#if (contains type "icon")}}
+    {{> SvgIcon iconType=type src=source iconSize=buttonSize }}
+  {{else}}
+    <span>{{label}}</span>
+  {{/if}}
+</button>
