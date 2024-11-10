@@ -31,11 +31,10 @@
 
     .chat-item__name {
       font-weight: bold;
-      color: var(--text-color)
+      color: var(--text-color);
     }
 
     .chat-item__infoPart {
-
       .chat-item__time {
         font-size: 12px;
         color: #7976aa;
@@ -51,7 +50,6 @@
         border: none;
         cursor: pointer;
         margin-left: 10px;
-
 
         .chat-item__deleteLine {
           position: absolute;
@@ -76,7 +74,6 @@
         }
       }
     }
-
   }
 
   &:hover .chat-item__deleteBtn {
@@ -103,7 +100,6 @@
         font-size: 15px;
       }
 
-
       .chat-item__ownPrefix {
         font-size: 1rem;
         font-weight: bold;
@@ -112,8 +108,6 @@
         display: inline;
       }
     }
-
-
 
     .chat-item__unreadCount {
       background-color: #175398;
@@ -128,9 +122,9 @@
       border-radius: 50%;
     }
   }
-
 }
 
-.chat-item:hover, .selected {
+.chat-item:hover,
+.selected {
   background-color: var(--secondary);
 }

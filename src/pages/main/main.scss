@@ -18,17 +18,17 @@
   }
 
   .left-side__header {
-      height: 15%;
-      border-bottom: 1px solid #5e5b5b;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      align-items: flex-end;
+    height: 15%;
+    border-bottom: 1px solid #5e5b5b;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-end;
 
-      .left-side__search {
-        width: 100%;
-        padding: 0 5px;
-      }
+    .left-side__search {
+      width: 100%;
+      padding: 0 5px;
+    }
   }
 }
 
@@ -79,7 +79,6 @@
         top: 4.5rem;
         right: 0.1rem;
       }
-
     }
   }
 
@@ -93,7 +92,6 @@
     padding: 20px 5px;
     position: relative;
 
-
     .message-menu-container {
       position: absolute;
       left: 0.5rem;
@@ -101,4 +99,3 @@
     }
   }
 }
-
