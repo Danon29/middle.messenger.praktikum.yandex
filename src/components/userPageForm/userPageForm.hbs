@@ -9,15 +9,17 @@
                 <span class="user-page__user-name">{{userName}}</span>
             {{/if}}
         </div>
+      <form>
         <div class="user-page__body">
             {{#each userInputs}}
-                {{> Input label=this.label type=this.type version="userPage" inputValue=this.value disabled=this.disabled}}
+              {{> Input label=this.label type=this.type version="userPage" inputValue=this.value disabled=this.disabled}}
             {{/each}}
         </div>
         <div class="user-page_buttons">
-            {{#each userProfileButtons }}
-                {{> Button type=this.type label=this.label textColor=this.textColor }}
-            {{/each}}
+          {{#each userProfileButtons }}
+            {{> Button submit=this.submit type=this.type label=this.label textColor=this.textColor }}
+          {{/each}}
         </div>
+      </form>
     </div>
 </div>

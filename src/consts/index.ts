@@ -108,7 +108,8 @@ export const pages: any = {
       userProfileButtons: [
         {
           type: 'primary',
-          label: 'Сохранить'
+          label: 'Сохранить',
+          submit: true
         }
       ]
     }
@@ -217,7 +218,8 @@ export const pages: any = {
       userProfileButtons: [
         {
           type: 'primary',
-          label: 'Сохранить'
+          label: 'Сохранить',
+          submit: true
         }
       ]
     }
