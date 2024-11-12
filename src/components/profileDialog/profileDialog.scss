@@ -1,0 +1,12 @@
+.profile-dialog__file-name {
+  font-size: 20px;
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+}
+
+.profile-dialog__action-button {
+  display: flex;
+  justify-content: center;
+  max-width: 9rem;
+}

@@ -1,0 +1,130 @@
+.chat-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 2px 0;
+  border-radius: 10px;
+  max-width: 500px;
+
+  &__avatar {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    background: #6c6b6b;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  &__content {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 5px;
+
+    .chat-item__name {
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    .chat-item__infoPart {
+      .chat-item__time {
+        font-size: 12px;
+        color: #7976aa;
+        margin-left: 10px;
+      }
+
+      .chat-item__deleteBtn {
+        display: none;
+        position: relative;
+        width: 10px;
+        height: 10px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-left: 10px;
+
+        .chat-item__deleteLine {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          width: 100%;
+          height: 2px;
+          background-color: #ffffff;
+          transition: background-color 0.2s ease;
+
+          &:first-child {
+            transform: rotate(45deg);
+          }
+
+          &:last-child {
+            transform: rotate(-45deg);
+          }
+        }
+
+        &:hover .chat-item__deleteLine {
+          background-color: #bcbbbb;
+        }
+      }
+    }
+  }
+
+  &:hover .chat-item__deleteBtn {
+    display: inline-flex;
+  }
+
+  &__body {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+
+    .chat-item__bodyText {
+      display: flex;
+      width: 100%;
+
+      .chat-item__text {
+        color: var(--text-color);
+        overflow: hidden;
+        max-width: 100%;
+        -webkit-line-clamp: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        font-size: 15px;
+      }
+
+      .chat-item__ownPrefix {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #a5a0ea;
+        margin-right: 0.4rem;
+        display: inline;
+      }
+    }
+
+    .chat-item__unreadCount {
+      background-color: #175398;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      width: 25px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+  }
+}
+
+.chat-item:hover,
+.selected {
+  background-color: var(--secondary);
+}

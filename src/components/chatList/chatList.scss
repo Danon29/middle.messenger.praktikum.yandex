@@ -1,0 +1,9 @@
+.chat-list {
+  height: 100vh;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}

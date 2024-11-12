@@ -1,0 +1,9 @@
+{{#> Dialog labelConfirm="Поменять" title=dialogTitle actionErrorMessage=actionErrorMessage error=hasError }}
+    {{#if file}}
+        <span class="profile-dialog__file-name">{{file}}</span>
+    {{else}}
+        <div class="profile-dialog__action-button">
+            {{> Button type="link" label=buttonLabel }}
+        </div>
+    {{/if}}
+{{/Dialog}}

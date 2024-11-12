@@ -1,0 +1,43 @@
+<div class="main-page">
+    <div class="left-side">
+            <div class="left-side__header">
+                <div class="left-side__header-button">
+                    {{> MenuItem src='/public/icons/person.svg' label="Профиль" }}
+                </div>
+                <div class="left-side__search">
+                    {{> TextField type="search" placeholder="Поиск" iconSize="medimum" }}
+                </div>
+            </div>
+                {{> ChatList }}
+    </div>
+    <div class="right-side">
+        <div class="right-side__header">
+            <div class="right-side__user-info">
+                <div class="right-side__avatar">
+                    {{> Avatar size="medium" clickable=false imageUrl='/public/icons/aXlZ17nbvD8.jpg' }}
+                </div>
+                <div class="right-side__user-name">{{userName}}</div>
+            </div>
+            <div class="right-side__user-button">
+                {{> Button type="icon" source='/public/icons/info.svg' }}
+                {{#if userMenuList}}
+                    <div class="user-menu-container">
+                        {{> Menu menuList=userMenuList }}
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+        <div class="right-side__content"></div>
+        <div class="right-side__footer">
+            {{#if messageMenuList}}
+                <div class="message-menu-container">
+                    {{> Menu menuList=messageMenuList }}
+                </div>
+            {{/if}}
+            {{> TextField type="message" placeholder="Сообщение"}}
+        </div>
+    </div>
+    {{#if showDialog}}
+        {{> UsersActionsDialog }}
+    {{/if}}
+</div>

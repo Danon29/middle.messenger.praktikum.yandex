@@ -1,0 +1,88 @@
+@import '../../style';
+
+.button {
+  background-color: initial;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  border: none;
+  max-height: 72px;
+  font-size: 1.2rem;
+
+  &_link {
+    color: #4e4adc;
+    text-align: center;
+    width: auto;
+
+    &:hover {
+      color: #7472df;
+    }
+  }
+
+  &_primary {
+    align-items: center;
+    display: flex;
+    font-family: Phantomsans, sans-serif;
+    color: var(--text-color);
+    justify-content: center;
+    line-height: 1em;
+    min-width: 140px;
+    padding: 3px;
+    text-decoration: none;
+    border-radius: 20px;
+    max-height: 64px;
+    width: 100%;
+
+    @include gradientAnimation(10s);
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    box-sizing: border-box;
+
+    &:active,
+    &:hover {
+      outline: 0;
+    }
+
+    span {
+      background-color: var(--primary);
+      padding: 16px 24px;
+      border-radius: 18px;
+      width: 100%;
+      height: 100%;
+      transition: 300ms;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &:hover span {
+      background: none;
+    }
+  }
+
+  &_icon,
+  &-icon-filled {
+    width: auto;
+  }
+
+  &_icon-filled:hover {
+    animation: none;
+  }
+
+  &_textColor {
+    &_cancel {
+      color: red;
+
+      &:hover {
+        color: #f16363;
+      }
+    }
+  }
+
+  // Варианты размеров
+  &_fontSize {
+    &_medium {
+      font-size: 2rem;
+    }
+  }
+}

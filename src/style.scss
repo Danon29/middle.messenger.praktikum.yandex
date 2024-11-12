@@ -1,0 +1,38 @@
+:root {
+  --secondary: #374456ff;
+  --primary: #1f2833;
+  --text-color: #fff;
+  --active: #338aff;
+  --error: #f30909;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--primary);
+  font-family: Phantomsans, sans-serif;
+}
+
+@keyframes primaryAnimation {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@mixin gradientAnimation($duration: 10s) {
+  background: linear-gradient(-45deg, #9372ee, #4e4adc, #338aff, #56b3ab);
+  background-size: 600%;
+  animation: primaryAnimation $duration linear infinite;
+}

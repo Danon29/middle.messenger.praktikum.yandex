@@ -1,0 +1,25 @@
+@use '../../style' as *;
+
+.icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &-filled {
+    @include gradientAnimation(10s);
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    box-sizing: border-box;
+
+    &:hover {
+      animation: none;
+    }
+  }
+}
+
+.medium {
+  height: 4.4rem;
+  width: 4.4rem;
+}
