@@ -1,2 +1,2 @@
 import './userPageForm.scss'
-export { default as UserPageForm } from './userPageForm.hbs?raw'
+export { default as UserPageForm } from './userPageForm'

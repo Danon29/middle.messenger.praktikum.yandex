@@ -57,7 +57,7 @@
           left: 0;
           width: 100%;
           height: 2px;
-          background-color: #ffffff;
+          background-color: #fff;
           transition: background-color 0.2s ease;
 
           &:first-child {
@@ -124,7 +124,10 @@
   }
 }
 
-.chat-item:hover,
-.selected {
+.chat-item.selected {
+  background-color: #18498d;
+}
+
+.chat-item:not(.selected):hover {
   background-color: var(--secondary);
 }

@@ -1,10 +1,10 @@
 import * as Pages from '../pages'
 
-export const pages: any = {
+export const pages: unknown = {
   errorPage404: [
     Pages.ErrorPage,
     {
-      ErrorCode: '404',
+      errorCode: '404',
       infoMessage: 'Не туда попали',
       buttonLabel: 'Назад к чатам'
     }
@@ -12,277 +12,19 @@ export const pages: any = {
   errorPage: [
     Pages.ErrorPage,
     {
-      ErrorCode: '500',
+      errorCode: '500',
       infoMessage: 'Мы уже фиксим',
       buttonLabel: 'Назад к чатам'
     }
   ],
-  userChangeAvatar: [
-    Pages.UserPage,
-    {
-      showDialog: true,
-      dialogTitle: 'Загрузите файл',
-      buttonLabel: 'Выбрать файлы на компьютере',
-      hasError: false,
-      // actionErrorMessage: 'Нужно выбрать файл',
-      // file: 'pic.png',
-      hasPageName: true,
-      userName: 'Вася',
-      userInputs: [
-        {
-          label: 'Почта',
-          type: 'email',
-          value: 'pochta@yandex.ru',
-          disabled: true
-        },
-        {
-          label: 'Логин',
-          value: 'Vasya',
-          disabled: true
-        },
-        {
-          label: 'Имя',
-          value: 'Василий',
-          disabled: true
-        },
-        {
-          label: 'Фамилия',
-          value: 'Иванов',
-          disabled: true
-        },
-        {
-          label: 'Имя в чате',
-          value: 'Pupkin',
-          disabled: true
-        },
-        {
-          label: 'Телефон',
-          type: 'tel',
-          value: '+7(923)3123311',
-          disabled: true
-        }
-      ],
-      userProfileButtons: [
-        {
-          type: 'link',
-          label: 'Изменить данные'
-        },
-        {
-          type: 'link',
-          label: 'Изменить пароль'
-        },
-        {
-          type: 'link',
-          label: 'Выйти',
-          textColor: 'cancel'
-        }
-      ]
-    }
-  ],
-  userEditPassword: [
-    Pages.UserPage,
-    {
-      hasPageName: false,
-      userName: 'Вася',
-      userInputs: [
-        {
-          label: 'Старый пароль',
-          type: 'password',
-          value: 'someValueforPassword',
-          disabled: false
-        },
-        {
-          label: 'Новый пароль',
-          type: 'password',
-          value: 'someNewValue',
-          disabled: false,
-          inputName: 'password'
-        },
-        {
-          label: 'Повторите новый пароль',
-          type: 'password',
-          value: 'someNewValue',
-          disabled: false
-        }
-      ],
-      userProfileButtons: [
-        {
-          type: 'primary',
-          label: 'Сохранить',
-          submit: true
-        }
-      ]
-    }
-  ],
-  userProfile: [
-    Pages.UserPage,
-    {
-      hasPageName: true,
-      userName: 'Вася',
-      userInputs: [
-        {
-          label: 'Почта',
-          type: 'email',
-          value: 'pochta@yandex.ru',
-          disabled: true
-        },
-        {
-          label: 'Логин',
-          value: 'Vasya',
-          disabled: true
-        },
-        {
-          label: 'Имя',
-          value: 'Василий',
-          disabled: true
-        },
-        {
-          label: 'Фамилия',
-          value: 'Иванов',
-          disabled: true
-        },
-        {
-          label: 'Имя в чате',
-          value: 'Pupkin',
-          disabled: true
-        },
-        {
-          label: 'Телефон',
-          type: 'tel',
-          value: '+7(923)3123311',
-          disabled: true
-        }
-      ],
-      userProfileButtons: [
-        {
-          type: 'link',
-          label: 'Изменить данные'
-        },
-        {
-          type: 'link',
-          label: 'Изменить пароль'
-        },
-        {
-          type: 'link',
-          label: 'Выйти',
-          textColor: 'cancel'
-        }
-      ]
-    }
-  ],
-  userEdit: [
-    Pages.UserPage,
-    {
-      hasPageName: false,
-      userName: 'Вася',
-      userInputs: [
-        {
-          label: 'Почта',
-          type: 'email',
-          value: 'pochta@yandex.ru',
-          disabled: false,
-          inputName: 'email'
-        },
-        {
-          label: 'Логин',
-          value: 'Vasya',
-          disabled: false,
-          inputName: 'login'
-        },
-        {
-          label: 'Имя',
-          value: 'Василий',
-          disabled: false,
-          inputName: 'first_name'
-        },
-        {
-          label: 'Фамилия',
-          value: 'Иванов',
-          disabled: false,
-          inputName: 'second_name'
-        },
-        {
-          label: 'Имя в чате',
-          value: 'Pupkin',
-          disabled: false,
-          inputName: 'display_name'
-        },
-        {
-          label: 'Телефон',
-          type: 'tel',
-          value: '+7(923)3123311',
-          disabled: false,
-          inputName: 'phone'
-        }
-      ],
-      userProfileButtons: [
-        {
-          type: 'primary',
-          label: 'Сохранить',
-          submit: true
-        }
-      ]
-    }
-  ],
-  login: [
-    Pages.LoginPage,
-    {
-      title: 'Вход',
-      inputs: [
-        {
-          label: 'Логин',
-          inputName: 'login'
-        },
-        {
-          label: 'Пароль',
-          type: 'password',
-          inputName: 'password',
-          errorMessage: 'Неверный пароль'
-        }
-      ],
-      buttons: [
-        {
-          label: 'Авторизоваться',
-          type: 'primary'
-        },
-        {
-          label: 'Нет аккаунта?',
-          type: 'link'
-        }
-      ]
-    }
-  ],
+  userChangeAvatar: [Pages.UserPage, {}],
+  userEditPassword: [Pages.UserEditPassword, {}],
+  userProfile: [Pages.UserPage, {}],
+  userEdit: [Pages.UserEdit, {}],
+  login: [Pages.LoginPage, {}],
   main: [
     Pages.MainPage,
     {
-      userMenuList: [
-        {
-          label: 'Добавить пользователя',
-          src: '/public/icons/plus.svg'
-        },
-        {
-          label: 'Удалить пользователя',
-          src: '/public/icons/x.svg'
-        }
-      ],
-      messageMenuList: [
-        {
-          label: 'Фото или видео',
-          src: '/public/icons/Union.svg'
-        },
-        {
-          label: 'Файл',
-          src: '/public/icons/file.svg'
-        },
-        {
-          label: 'Локация',
-          src: '/public/icons/location.svg'
-        }
-      ],
-      userName: 'Вася',
-      labelConfirm: 'Удалить',
-      dialogTitle: 'Добавить пользователя',
-      showDialog: false,
       chats: [
         {
           name: 'John Doe',
@@ -291,7 +33,8 @@ export const pages: any = {
           count: 1,
           isOwnMessage: true,
           time: '14:25',
-          imageUrl: '/public/icons/avatarImg.jpeg'
+          imageUrl: '/public/icons/avatarImg.jpeg',
+          active: false
         },
         {
           name: 'Alice Cooper',
@@ -299,7 +42,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: false,
-          time: '14:30'
+          time: '14:30',
+          active: false
         },
         {
           name: 'Carlos Rivera',
@@ -307,7 +51,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: true,
-          time: '14:35'
+          time: '14:35',
+          active: false
         },
         {
           name: 'Emily Johnson',
@@ -315,7 +60,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: false,
-          time: '14:40'
+          time: '14:40',
+          active: false
         },
         {
           name: 'Tom Harris',
@@ -323,7 +69,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: true,
-          time: '14:45'
+          time: '14:45',
+          active: false
         },
         {
           name: 'Sarah Lee',
@@ -331,7 +78,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: false,
-          time: '14:50'
+          time: '14:50',
+          active: false
         },
         {
           name: 'Jake Adams',
@@ -339,7 +87,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: true,
-          time: '14:55'
+          time: '14:55',
+          active: false
         },
         {
           name: 'Olivia Martinez',
@@ -347,7 +96,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: false,
-          time: '15:00'
+          time: '15:00',
+          active: false
         },
         {
           name: 'David White',
@@ -355,7 +105,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: true,
-          time: '15:05'
+          time: '15:05',
+          active: false
         },
         {
           name: 'Rachel Green',
@@ -363,7 +114,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: false,
-          time: '15:10'
+          time: '15:10',
+          active: false
         },
         {
           name: 'Maxwell Stone',
@@ -371,7 +123,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: true,
-          time: '15:15'
+          time: '15:15',
+          active: false
         },
         {
           name: 'Sophie Turner',
@@ -379,7 +132,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: false,
-          time: '15:20'
+          time: '15:20',
+          active: false
         },
         {
           name: 'Liam Smith',
@@ -387,7 +141,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: true,
-          time: '15:25'
+          time: '15:25',
+          active: false
         },
         {
           name: 'Mia Davis',
@@ -395,7 +150,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: false,
-          time: '15:30'
+          time: '15:30',
+          active: false
         },
         {
           name: 'Ethan Brown',
@@ -403,7 +159,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: true,
-          time: '15:35'
+          time: '15:35',
+          active: false
         },
         {
           name: 'Chloe Wilson',
@@ -411,7 +168,8 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: false,
-          time: '15:40'
+          time: '15:40',
+          active: false
         },
         {
           name: 'Jackson Clark',
@@ -419,59 +177,104 @@ export const pages: any = {
           selected: false,
           count: 1,
           isOwnMessage: true,
-          time: '15:45'
+          time: '15:45',
+          active: false
+        }
+      ],
+      messages: [
+        {
+          text: 'Привет, как дела?',
+          time: '14:14',
+          isRead: true,
+          isOwnMessage: true
+        },
+        {
+          text: 'Привет! Все хорошо, а у тебя?',
+          time: '14:15',
+          isRead: true,
+          isOwnMessage: false
+        },
+        {
+          text: 'У меня тоже все нормально, спасибо, что спросил.',
+          time: '14:16',
+          isRead: true,
+          isOwnMessage: true
+        },
+        {
+          text: 'Рад это слышать! Чем занимаешься?',
+          time: '14:17',
+          isRead: true,
+          isOwnMessage: false
+        },
+        {
+          text: 'Работаю немного, а ты?',
+          time: '14:18',
+          isRead: true,
+          isOwnMessage: true
+        },
+        {
+          text: 'Я тоже на работе, но немного отвлекаюсь на чат.',
+          time: '14:19',
+          isRead: true,
+          isOwnMessage: false
+        },
+        {
+          text: 'Знаю, как это бывает. Как продвигается работа?',
+          time: '14:20',
+          isRead: true,
+          isOwnMessage: true
+        },
+        {
+          text: 'Медленно, но все-таки двигаюсь. У тебя какие планы на вечер?',
+          time: '14:21',
+          isRead: true,
+          isOwnMessage: false
+        },
+        {
+          text: 'Планирую немного отдохнуть, может быть, посмотрю фильм.',
+          time: '14:22',
+          isRead: true,
+          isOwnMessage: true
+        },
+        {
+          text: 'Хорошая идея! Какой фильм хочешь посмотреть?',
+          time: '14:23',
+          isRead: true,
+          isOwnMessage: false
+        },
+        {
+          text: 'Не решил ещё, но что-то интересное, наверное.',
+          time: '14:24',
+          isRead: true,
+          isOwnMessage: true
+        },
+        {
+          text: 'Может, что-то комедийное, чтобы расслабиться?',
+          time: '14:25',
+          isRead: true,
+          isOwnMessage: false
+        },
+        {
+          text: 'Точно, хорошая идея! Нужно немного посмеяться.',
+          time: '14:26',
+          isRead: true,
+          isOwnMessage: true
+        },
+        {
+          text: 'Ну что, удачи тебе в фильме! Я тоже пойду работать.',
+          time: '14:27',
+          isRead: true,
+          isOwnMessage: false
+        },
+        {
+          text: 'Хорошо, спасибо! Удачи тебе в работе!',
+          time: '14:28',
+          isRead: false,
+          isOwnMessage: true
         }
       ]
     }
   ],
-  nav: [Pages.NavigatePage],
-  register: [
-    Pages.RegisterPage,
-    {
-      title: 'Регистрация',
-      inputs: [
-        {
-          label: 'Почта',
-          type: 'email',
-          inputName: 'email'
-        },
-        {
-          label: 'Логин',
-          inputName: 'login'
-        },
-        {
-          label: 'Имя',
-          inputName: 'first_name'
-        },
-        {
-          label: 'Фамилия',
-          inputName: 'second_name'
-        },
-        {
-          label: 'Телефон',
-          type: 'tel',
-          inputName: 'phone'
-        },
-        {
-          label: 'Пароль',
-          type: 'password',
-          inputName: 'password'
-        },
-        {
-          label: 'Пароль (еще раз)',
-          type: 'password'
-        }
-      ],
-      buttons: [
-        {
-          label: 'Зарегистрироваться',
-          type: 'primary'
-        },
-        {
-          label: 'Войти',
-          type: 'link'
-        }
-      ]
-    }
-  ]
+  nav: [Pages.NavigatePage, {}],
+  register: [Pages.RegisterPage, {}]
 }

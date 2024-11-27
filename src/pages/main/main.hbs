@@ -5,7 +5,7 @@
                     {{> MenuItem src='/public/icons/person.svg' label="Профиль" }}
                 </div>
                 <div class="left-side__search">
-                    {{> TextField type="search" placeholder="Поиск" iconSize="medimum" }}
+                    {{> SearchField type="search" placeholder="Поиск" iconSize="medimum" }}
                 </div>
             </div>
                 {{> ChatList }}
@@ -34,7 +34,7 @@
                     {{> Menu menuList=messageMenuList }}
                 </div>
             {{/if}}
-            {{> TextField type="message" placeholder="Сообщение"}}
+            {{> SearchField type="message" placeholder="Сообщение"}}
         </div>
     </div>
     {{#if showDialog}}

@@ -1,0 +1,13 @@
+.chat-container {
+  display: flex;
+  flex-direction: column; /* Выстраиваем сообщения по вертикали */
+  align-items: flex-start; /* Сообщения по умолчанию слева */
+  padding: 0 2rem;
+  overflow: auto;
+  height: 100%;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}

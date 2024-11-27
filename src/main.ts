@@ -2,6 +2,7 @@ import Handlebars from 'handlebars'
 import * as Components from './components'
 import './style.scss'
 import { pages } from './consts'
+import renderDOM from './core/renderDOM.ts'
 
 Handlebars.registerHelper('eq', function (a, b) {
   return a === b
@@ -12,11 +13,19 @@ Handlebars.registerHelper('contains', function (a, b) {
 })
 
 Object.entries(Components).forEach(([name, template]) => {
+  if (typeof template === 'function') {
+    return
+  }
   Handlebars.registerPartial(name, template)
 })
 
 function navigate(page: string) {
   const [source, context] = pages[page]
+  if (typeof source === 'function') {
+    renderDOM(new source({ ...context }))
+    return
+  }
+
   const container = document.getElementById('app')!
 
   const temlpatingFunction = Handlebars.compile(source)
