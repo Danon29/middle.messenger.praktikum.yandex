@@ -31,8 +31,8 @@ export default class ChatItem extends Block {
     })
   }
 
-  componentDidUpdate(oldProps, newProps): boolean {
-    const element = this.getContent()
+  componentDidUpdate(_: ChatItemProps, newProps: ChatItemProps): boolean {
+    const element = this.getContent() as HTMLElement
     if (newProps.active) {
       element?.classList?.add('selected')
     } else {

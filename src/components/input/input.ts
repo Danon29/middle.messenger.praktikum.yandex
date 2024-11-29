@@ -6,9 +6,10 @@ type InputProps = {
   disabled?: boolean
   type?: string
   label: string
-  events: { [key: string]: (e) => void }
+  events: { [key: string]: (e: InputEvent) => void }
   value?: string
 }
+
 export default class Input extends Block {
   constructor(props: InputProps) {
     super('input', {

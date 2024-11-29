@@ -2,8 +2,13 @@ import Block from '../../core/block.ts'
 import { IconButton } from '../iconButton'
 import SearchInput from './searchInput.ts'
 
+interface SearchFieldProps {
+  placeholder: string
+  type: string
+}
+
 export default class SearchField extends Block {
-  constructor(props) {
+  constructor(props: SearchFieldProps) {
     super('form', {
       ...props,
       formState: { search: '' },
@@ -11,8 +16,7 @@ export default class SearchField extends Block {
       className: `searchField`,
       SearchButton: new IconButton({ kind: 'search', onClick: (e) => console.log(e) }),
       InputSearch: new SearchInput({
-        className: 'input__element',
-        placeholder: 'Поиск'
+        placeholder: props.placeholder
       })
     })
   }

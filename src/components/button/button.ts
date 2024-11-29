@@ -8,7 +8,7 @@ export interface ButtonProps {
   textColor?: string
   buttonSize?: string
   submit?: boolean
-  onClick?: (e) => void
+  onClick?: (e: MouseEvent) => void
 }
 
 export default class Button extends Block {

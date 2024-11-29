@@ -16,7 +16,7 @@ const ICONS_SVG_SOURCE = {
 
 interface IconButtonProps {
   kind: keyof typeof ICONS_SVG_SOURCE
-  onClick: (e) => void
+  onClick: (e: Event) => void
   type?: string
 }
 
@@ -32,9 +32,9 @@ export default class IconButton extends Block {
   }
 
   render(): string {
-    const svgSource = ICONS_SVG_SOURCE[this.props.kind]
+    const svgSource = ICONS_SVG_SOURCE[this.props.kind as keyof typeof ICONS_SVG_SOURCE]
 
-    if (!svgSource) {
+    if (typeof svgSource !== 'string') {
       return ''
     }
 

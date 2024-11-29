@@ -4,8 +4,8 @@ import { ButtonProps } from '../button/button.ts'
 
 interface FormProps {
   title: string
-  inputs: InputFieldProps[]
-  buttons: ButtonProps[]
+  inputs: InputFieldProps[] | string
+  buttons: ButtonProps[] | string
   onSubmit: (e: Event) => void
 }
 

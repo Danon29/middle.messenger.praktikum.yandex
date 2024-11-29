@@ -22,12 +22,15 @@ export default class MessageField extends Block {
             this.setProps({
               formState: {
                 ...this.props.formState,
-                message: e.target.value
+                message: (e.target as HTMLTextAreaElement).value
               }
             })
 
-            this.validator.updateFormState({ ...this.props.formState, message: e.target.value })
-            const isValid = this.validator.validateForm()
+            this.validator?.updateFormState({
+              ...this.props.formState,
+              message: (e.target as HTMLTextAreaElement).value
+            })
+            const isValid = this.validator?.validateForm()
             if (isValid) this.setProps({ errorMessage: '' })
           }
         }

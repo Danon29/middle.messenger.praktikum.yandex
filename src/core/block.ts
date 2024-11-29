@@ -2,7 +2,7 @@ import EventBus from './eventBus'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
 import FormValidator from '../utils/validator/FormValidator.ts'
-import snakeToCamel from '../utils/snakeCaseToCamel.ts'
+import { InputField } from '../components'
 
 export default class Block {
   static EVENTS = {
@@ -12,13 +12,13 @@ export default class Block {
     FLOW_RENDER: 'flow:render'
   }
 
-  private _element = null
-  private _meta = null
+  private _element: HTMLElement | null = null
+  private _meta: { tagName: string; props: Record<string, any> } | null = null
   private _id = nanoid(6)
   protected eventBus: () => EventBus<string>
   protected children: Record<string, Block | Block[]>
-  protected props: any
-  protected validator: FormValidator
+  public props: Record<string, any>
+  protected validator: FormValidator | null = null
 
   protected selfCheck: boolean
 
@@ -30,7 +30,7 @@ export default class Block {
    *
    * @returns {void}
    */
-  constructor(tagName = 'div', propsWithChildren = {}, validator?, selfCheck = false) {
+  constructor(tagName = 'div', propsWithChildren = {}, validator?: FormValidator, selfCheck = false) {
     const eventBus = new EventBus()
     this.eventBus = () => eventBus
 
@@ -50,7 +50,7 @@ export default class Block {
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  _registerEvents(eventBus) {
+  _registerEvents(eventBus: EventBus<string>) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this))
@@ -58,17 +58,19 @@ export default class Block {
   }
 
   _createResources() {
-    const { tagName, props } = this._meta
-    this._element = this._createDocumentElement(tagName)
-    if (typeof props.className === 'string') {
-      const classes = props.className.split(' ')
-      this._element.classList.add(...classes)
-    }
+    if (this._meta) {
+      const { tagName, props } = this._meta
+      this._element = this._createDocumentElement(tagName)
+      if (typeof props.className === 'string') {
+        const classes = props.className.split(' ')
+        this._element.classList.add(...classes)
+      }
 
-    if (typeof props.attrs === 'object') {
-      Object.entries(props.attrs).forEach(([attrName, attrValue]) => {
-        this._element.setAttribute(attrName, attrValue)
-      })
+      if (typeof props.attrs === 'object') {
+        Object.entries(props.attrs).forEach(([attrName, attrValue]) => {
+          this._element!.setAttribute(attrName, String(attrValue))
+        })
+      }
     }
   }
 
@@ -77,9 +79,11 @@ export default class Block {
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
   }
 
+  //@ts-ignore
   _getChildrenAndProps(propsAndChildren) {
-    const children = {}
-    const props = {}
+    const children: Record<string, Block | Block[]> = {}
+    //@ts-ignore
+    const props: Record<string, any> = {}
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (Array.isArray(value)) {
@@ -90,7 +94,6 @@ export default class Block {
             props[key] = value
           }
         })
-
         return
       }
       if (value instanceof Block) {
@@ -107,12 +110,14 @@ export default class Block {
     this.componentDidMount()
   }
 
-  componentDidMount(oldProps?) {}
+  componentDidMount() {}
 
   dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
   }
 
+  // Не представляю как типизировать пропсы для разных компонентов, включая дочерних
+  //@ts-ignore
   _componentDidUpdate(oldProps, newProps) {
     const response = this.componentDidUpdate(oldProps, newProps)
     if (!response) {
@@ -121,10 +126,12 @@ export default class Block {
     this._render()
   }
 
+  //@ts-ignore
   componentDidUpdate(oldProps, newProps) {
     return true
   }
 
+  //@ts-ignore
   setProps = (nextProps) => {
     if (!nextProps) {
       return
@@ -141,7 +148,10 @@ export default class Block {
     const { events = {} } = this.props
 
     Object.keys(events).forEach((eventName) => {
-      this._element.addEventListener(eventName, events[eventName])
+      const handler = events[eventName]
+      if (typeof handler === 'function' && this._element) {
+        this._element?.addEventListener(eventName, events[eventName])
+      }
     })
   }
 
@@ -149,7 +159,10 @@ export default class Block {
     const { events = {} } = this.props
 
     Object.keys(events).forEach((eventName) => {
-      this._element.removeEventListener(eventName, events[eventName])
+      const handler = events[eventName]
+      if (typeof handler === 'function' && this._element) {
+        this._element.removeEventListener(eventName, handler)
+      }
     })
   }
 
@@ -164,7 +177,7 @@ export default class Block {
       }
     })
 
-    const fragment = this._createDocumentElement('template')
+    const fragment = this._createDocumentElement('template') as HTMLTemplateElement
     const template = Handlebars.compile(this.render())
     fragment.innerHTML = template(propsAndStubs)
 
@@ -173,28 +186,28 @@ export default class Block {
         child.forEach((component) => {
           if ('content' in fragment) {
             const stub = fragment.content.querySelector(`[data-id="${component._id}"]`)
-            stub?.replaceWith(component.getContent())
+            stub?.replaceWith(component.getContent() as HTMLElement)
           }
         })
       } else {
         if ('content' in fragment) {
           const stub = fragment.content.querySelector(`[data-id="${child._id}"]`)
-          stub?.replaceWith(child.getContent())
+          stub?.replaceWith(child.getContent() as HTMLElement)
         }
       }
     })
 
-    return 'content' in fragment ? fragment.content : ''
+    return fragment.content
   }
 
   _render() {
     this._removeEvents()
     const block = this._compile()
 
-    if (this._element.children.length === 0) {
-      this._element.appendChild(block)
+    if (this._element?.children.length === 0) {
+      this._element!.appendChild(block)
     } else {
-      this._element.replaceChildren(block)
+      this._element!.replaceChildren(block)
     }
 
     this._addEvents()
@@ -208,6 +221,7 @@ export default class Block {
     return this.element
   }
 
+  //@ts-ignore
   _makePropsProxy(props) {
     const eventBus = this.eventBus()
     const emitBind = eventBus.emit.bind(eventBus)
@@ -227,24 +241,26 @@ export default class Block {
         return true
       },
       deleteProperty(target, property) {
-        throw new Error('Нет доступа')
+        throw new Error(`Нет доступа к полю ${String(property)} у ${target}`)
         return true
       }
     })
   }
 
-  _createDocumentElement(tagName) {
+  _createDocumentElement(tagName: string) {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName)
   }
 
-  show() {
-    this.getContent().style.display = 'block'
-  }
-
-  hide() {
-    this.getContent().style.display = 'none'
-  }
+  // show() {
+  //   const content = this.getContent()
+  //   if (content) content.style.display = 'block'
+  // }
+  //
+  // hide() {
+  //   const content = this.getContent()
+  //   if (content && content.style) content.style.display = 'none'
+  // }
 
   protected handleInputChange(event: Event): void {
     const { name, value } = event.target as HTMLInputElement
@@ -255,27 +271,24 @@ export default class Block {
       }
     })
 
-    this.validator.updateFormState(this.props.formState)
+    this.validator?.updateFormState(this.props.formState)
 
-    this.validator.handleBlur(event)
-    this.setProps({ errors: this.validator.getErrors() })
+    this.validator?.handleBlur(event)
+    this.setProps({ errors: this.validator?.getErrors() })
 
-    const errorMessage = this.validator.getErrors()[name] || ''
+    const errorMessage = this.validator?.getErrors()[name] || ''
 
     if (this.selfCheck) this.setProps({ errorMessage })
-    else
-      this.children[`Input${snakeToCamel(name.charAt(0).toUpperCase() + name.slice(1))}`].setProps({
-        errorMessage
-      })
+    else (this.children.inputs as InputField[]).find((input) => input.props.name === name)?.setProps({ errorMessage })
   }
 
   protected handleSubmit(event: Event): void {
     event.preventDefault()
-    this.validator.updateFormState(this.props.formState)
+    this.validator?.updateFormState(this.props.formState)
 
-    const isValid = this.validator.validateForm()
+    const isValid = this.validator?.validateForm()
 
-    const errors = this.validator.getErrors()
+    const errors = this.validator?.getErrors() as { [p: string]: string }
     this.setProps({ errors })
 
     if (isValid) {
@@ -284,9 +297,7 @@ export default class Block {
       Object.entries(errors).forEach(([key, errorMessage]) => {
         if (this.selfCheck) this.setProps({ errorMessage })
         else
-          this.children[`Input${snakeToCamel(key.charAt(0).toUpperCase() + key.slice(1))}`].setProps({
-            errorMessage
-          })
+          (this.children.inputs as InputField[]).find((input) => input.props.name === key)?.setProps({ errorMessage })
       })
     }
   }

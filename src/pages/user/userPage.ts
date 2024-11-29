@@ -1,8 +1,18 @@
 import Block from '../../core/block.ts'
 import { Avatar, Button, IconButton, InputField, UserPageForm } from '../../components'
+import FormValidator from '../../utils/validator/FormValidator.ts'
+import { InputFieldProps } from '../../components/input/inputField.ts'
+import { ButtonProps } from '../../components/button/button.ts'
+
+export interface UserPageProps {
+  inputs: InputFieldProps[]
+  buttons: ButtonProps[]
+  formState?: { [key: string]: string }
+  errors?: { [key: string]: string }
+}
 
 export default class UserPage extends Block {
-  constructor(props) {
+  constructor(props: UserPageProps) {
     super('div', {
       ...props,
       className: 'user-page',
@@ -15,82 +25,42 @@ export default class UserPage extends Block {
         size: 'big',
         clickable: true
       }),
-      InputEmail: new InputField({
-        label: 'Почта',
-        name: 'email',
-        value: 'pochta@yandex.ru',
-        disabled: true,
-        version: 'userPage'
-      }),
-      InputLogin: new InputField({
-        label: 'Логин',
-        name: 'login',
-        value: 'Vasya',
-        disabled: true,
-        version: 'userPage'
-      }),
-      InputFirstName: new InputField({
-        label: 'Имя',
-        name: 'first_name',
-        value: 'Василий',
-        disabled: true,
-        version: 'userPage'
-      }),
-      InputSecondName: new InputField({
-        label: 'Фамилия',
-        name: 'second_name',
-        value: 'Иванов',
-        disabled: true,
-        version: 'userPage'
-      }),
-      InputNickname: new InputField({
-        label: 'Имя в чате',
-        name: 'phone',
-        value: 'Pupkin',
-        disabled: true,
-        version: 'userPage'
-      }),
-      InputPhone: new InputField({
-        label: 'Телефон',
-        type: 'tel',
-        name: 'phone',
-        value: '+7(923)3123311',
-        disabled: true,
-        version: 'userPage'
-      }),
-      ChangeInfoButton: new Button({
-        label: 'Изменить данные',
-        type: 'link',
-        onClick: () => console.log('changed data')
-      }),
-      ChangePasswordButton: new Button({
-        label: 'Изменить пароль',
-        type: 'link',
-        onClick: () => console.log('changed password')
-      }),
-      LogoutButton: new Button({
-        label: 'Выйти',
-        type: 'link',
-        textColor: 'cancel',
-        onClick: () => console.log('log out')
-      })
+      inputs: props.inputs.map(
+        (input) =>
+          new InputField({
+            label: input.label,
+            type: input.type,
+            onChange: (e) => this.handleInputChange(e),
+            name: input.name,
+            version: 'userPage',
+            value: input.value,
+            disabled: input.disabled
+          })
+      ),
+      buttons: props.buttons.map(
+        (button) =>
+          new Button({
+            label: button.label,
+            type: button.type,
+            onClick: button.submit ? (e) => this.handleSubmit(e) : () => console.log('cliked'),
+            textColor: button.textColor
+          })
+      )
     })
+    if (props.formState) this.validator = new FormValidator(props.formState)
   }
 
   render(): string {
     return new UserPageForm({
       inputs: `
-        {{{ InputEmail }}}
-        {{{ InputLogin }}}
-        {{{ InputFirstName }}}
-        {{{ InputSecondName }}}
-        {{{ InputNickname }}}
-        {{{ InputPhone }}}
+        {{#each inputs}}
+          {{{this}}}
+        {{/each}}
       `,
       buttons: `
-        {{{ ChangeInfoButton }}}
-        {{{ ChangePasswordButton }}}
-        {{{ LogoutButton }}}
+        {{#each buttons}}
+          {{{this}}}
+        {{/each}}
       `,
       onSubmit: (e) => this.handleSubmit(e)
     }).render()

@@ -28,7 +28,7 @@ export default class MainPage extends Block {
         iconSize: 'small'
       }),
       ChatInfoButton: new IconButton({ kind: 'info', onClick: () => console.log('clicked') }),
-      SearchField: new SearchField({ type: 'search' }),
+      SearchField: new SearchField({ type: 'search', placeholder: 'Поиск' }),
       MessageField: new MessageField({ placeholder: 'Введите сообщение' }),
       ChatsList: new ChatList({
         chats: props.chats

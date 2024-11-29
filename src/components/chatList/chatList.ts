@@ -31,16 +31,20 @@ export default class ChatList extends Block {
     const { activeIndex } = this.props
     const { chats } = this.children
 
-    chats.forEach((chat, index) => {
-      if (index === activeIndex) {
-        chat.setProps({ active: true })
-        return
-      }
+    if (Array.isArray(chats)) {
+      chats.forEach((chat, index) => {
+        if (index === activeIndex) {
+          chat.setProps({ active: true })
+          return
+        }
 
-      if (chat.props.active) {
-        chat.setProps({ active: false })
-      }
-    })
+        if (chat.props.active) {
+          chat.setProps({ active: false })
+        }
+      })
+    } else {
+      chats.setProps({ active: true })
+    }
 
     return `
       {{#each chats}}

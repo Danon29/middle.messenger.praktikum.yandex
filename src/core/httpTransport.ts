@@ -5,8 +5,15 @@ export const METHODS = {
   DELETE: 'DELETE'
 }
 
-function queryStringify(data) {
-  if (typeof data !== 'object') {
+interface HttpOptions {
+  timeout: number
+  headers?: Record<string, string>
+  method: string
+  data?: Record<string, string | number | Object> // если data - это объект с ключами-строками и значениями-строками/числами
+}
+
+function queryStringify(data: Record<string, string | number | Object> | null): string {
+  if (typeof data !== 'object' || data === null) {
     throw new Error('Data must be object')
   }
 
@@ -15,25 +22,24 @@ function queryStringify(data) {
     return `${result}${key}=${data[key]}${index < keys.length - 1 ? '&' : ''}`
   }, '?')
 }
-
 export class HTTPTransport {
-  get = (url, options = { timeout: 5000 }) => {
-    return this.request(url, { ...options, method: METHODS.GET }, options.timeout)
+  get = (url: string, options: HttpOptions = { timeout: 5000, method: METHODS.GET }) => {
+    return this.request(url, options, options.timeout)
   }
 
-  post = (url, options = { timeout: 5000 }) => {
-    return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
+  post = (url: string, options: HttpOptions = { timeout: 5000, method: METHODS.POST }) => {
+    return this.request(url, options, options.timeout)
   }
 
-  put = (url, options = { timeout: 5000 }) => {
-    return this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
+  put = (url: string, options: HttpOptions = { timeout: 5000, method: METHODS.PUT }) => {
+    return this.request(url, options, options.timeout)
   }
 
-  delete = (url, options = { timeout: 5000 }) => {
-    return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout)
+  delete = (url: string, options: HttpOptions = { timeout: 5000, method: METHODS.DELETE }) => {
+    return this.request(url, options, options.timeout)
   }
 
-  request = (url, options = { timeout: 5000 }, timeout = 5000) => {
+  request = (url: string, options: HttpOptions, timeout: number): Promise<XMLHttpRequest> => {
     const { headers = {}, method, data } = options
 
     return new Promise(function (resolve, reject) {
@@ -45,7 +51,7 @@ export class HTTPTransport {
       const xhr = new XMLHttpRequest()
       const isGet = method === METHODS.GET
 
-      xhr.open(method, isGet && !!data ? `${url}${queryStringify(data)}` : url)
+      xhr.open(method, isGet && data ? `${url}${queryStringify(data)}` : url)
 
       Object.keys(headers).forEach((key) => {
         xhr.setRequestHeader(key, headers[key])
@@ -64,7 +70,7 @@ export class HTTPTransport {
       if (isGet || !data) {
         xhr.send()
       } else {
-        xhr.send(data)
+        xhr.send(JSON.stringify(data))
       }
     })
   }

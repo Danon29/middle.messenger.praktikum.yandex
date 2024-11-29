@@ -18,10 +18,137 @@ export const pages: unknown = {
     }
   ],
   userChangeAvatar: [Pages.UserPage, {}],
-  userEditPassword: [Pages.UserEditPassword, {}],
-  userProfile: [Pages.UserPage, {}],
-  userEdit: [Pages.UserEdit, {}],
-  login: [Pages.LoginPage, {}],
+  userEditPassword: [
+    Pages.UserPage,
+    {
+      inputs: [
+        {
+          label: 'Старый пароль',
+          type: 'password',
+          value: 'someValueforPassword',
+          version: 'userPage'
+        },
+        { label: 'Новый пароль', type: 'password', name: 'password', value: 'someNewValue', version: 'userPage' },
+        {
+          label: 'Повторите новый пароль',
+          type: 'password',
+          name: 'password_again',
+          value: 'someNewValue',
+          version: 'userPage'
+        }
+      ],
+      buttons: [
+        {
+          label: 'Сохранить',
+          type: 'primary',
+          submit: true
+        }
+      ],
+      formState: {
+        password: '',
+        password_again: ''
+      },
+      errors: {
+        password: '',
+        password_again: ''
+      }
+    }
+  ],
+  userProfile: [
+    Pages.UserPage,
+    {
+      inputs: [
+        {
+          label: 'Почта',
+          name: 'email',
+          value: 'pochta@yandex.ru',
+          disabled: true,
+          version: 'userPage'
+        },
+        { label: 'Логин', name: 'login', value: 'Vasya', disabled: true, version: 'userPage' },
+        { label: 'Имя', name: 'first_name', value: 'Василий', disabled: true, version: 'userPage' },
+        { label: 'Фамилия', name: 'second_name', value: 'Иванов', disabled: true, version: 'userPage' },
+        { label: 'Имя в чате', name: 'phone', value: 'Pupkin', disabled: true, version: 'userPage' },
+        { label: 'Телефон', type: 'tel', name: 'phone', value: '+7(923)3123311', disabled: true, version: 'userPage' }
+      ],
+      buttons: [
+        {
+          label: 'Изменить данные',
+          type: 'primary',
+          submit: true
+        },
+        { label: 'Изменить пароль', type: 'link', onClick: () => console.log('changed password') },
+        { label: 'Выйти', type: 'link', textColor: 'cancel', onClick: () => console.log('log out') }
+      ]
+    }
+  ],
+  userEdit: [
+    Pages.UserPage,
+    {
+      inputs: [
+        {
+          label: 'Почта',
+          name: 'email',
+          value: 'pochta@yandex.ru',
+          disabled: false,
+          version: 'userPage'
+        },
+        { label: 'Логин', name: 'login', value: 'Vasya', disabled: false, version: 'userPage' },
+        { label: 'Имя', name: 'first_name', value: 'Василий', disabled: false, version: 'userPage' },
+        { label: 'Фамилия', name: 'second_name', value: 'Иванов', disabled: false, version: 'userPage' },
+        { label: 'Имя в чате', value: 'Pupkin', disabled: false, version: 'userPage' },
+        { label: 'Телефон', type: 'tel', name: 'phone', value: '+7(923)3123311', disabled: false, version: 'userPage' }
+      ],
+      buttons: [
+        {
+          label: 'Сохранить',
+          type: 'primary',
+          submit: true
+        }
+      ],
+      formState: {
+        email: 'pochta@yandex.ru',
+        login: 'Vasya',
+        first_name: 'Василий',
+        second_name: 'Иванов',
+        phone: '+79233123311'
+      },
+      errors: {
+        email: '',
+        login: '',
+        first_name: '',
+        second_name: '',
+        phone: ''
+      }
+    }
+  ],
+  login: [
+    Pages.LoginPage,
+    {
+      inputs: [
+        {
+          label: 'Логин',
+          name: 'login'
+        },
+        {
+          label: 'Пароль',
+          type: 'password',
+          name: 'password'
+        }
+      ],
+      buttons: [
+        {
+          label: 'Войти',
+          type: 'primary',
+          submit: true
+        },
+        {
+          label: 'Нет аккаунта? ',
+          type: 'link'
+        }
+      ]
+    }
+  ],
   main: [
     Pages.MainPage,
     {
@@ -276,5 +403,54 @@ export const pages: unknown = {
     }
   ],
   nav: [Pages.NavigatePage, {}],
-  register: [Pages.RegisterPage, {}]
+  register: [
+    Pages.RegisterPage,
+    {
+      inputs: [
+        {
+          label: 'Почта',
+          type: 'email',
+          name: 'email'
+        },
+        {
+          label: 'Логин',
+          name: 'login'
+        },
+        {
+          label: 'Имя',
+          name: 'first_name'
+        },
+        {
+          label: 'Фамилия',
+          name: 'second_name'
+        },
+        {
+          label: 'Телефон',
+          type: 'tel',
+          name: 'phone'
+        },
+        {
+          label: 'Пароль',
+          type: 'password',
+          name: 'password'
+        },
+        {
+          label: 'Пароль (еще раз)',
+          type: 'password',
+          name: 'password_again'
+        }
+      ],
+      buttons: [
+        {
+          label: 'Зарегистрироваться',
+          type: 'primary',
+          submit: true
+        },
+        {
+          label: 'Войти',
+          type: 'link'
+        }
+      ]
+    }
+  ]
 }

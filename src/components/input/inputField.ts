@@ -4,7 +4,7 @@ import Input from './input.ts'
 export interface InputFieldProps {
   label: string
   name?: string
-  onChange?: (e: InputEvent) => void // Тип события для HTMLInputElement
+  onChange?: (e: InputEvent) => void
   disabled?: boolean
   type?: string
   version?: string
@@ -20,7 +20,7 @@ export default class InputField extends Block {
       Input: new Input({
         className: 'input__element',
         events: {
-          change: props.onChange
+          change: props.onChange || (() => {})
         },
         disabled: props.disabled,
         type: props.type,
@@ -33,11 +33,11 @@ export default class InputField extends Block {
 
   render(): string {
     return `
-          {{{Input}}}
-          <label for="{{label}}" class="input__label">{{label}}</label>
-          {{#if errorMessage }}
-              <div class="input__error">{{errorMessage}}</div>
-          {{/if}}
+      {{{Input}}}
+      <label for="{{label}}" class="input__label">{{label}}</label>
+      {{#if errorMessage }}
+          <div class="input__error">{{errorMessage}}</div>
+      {{/if}}
     `
   }
 }
