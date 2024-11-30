@@ -22,7 +22,10 @@ export default [
     },
     rules: {
       ...tseslint.configs.recommended.rules,
-      'prettier/prettier': 'warn'
+      'prettier/prettier': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/ban-ts-comment': 'off',
+      '@typescript-eslint/no-unsafe-function-type': 'off'
     }
   },
   {

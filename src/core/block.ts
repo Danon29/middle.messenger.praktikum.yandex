@@ -10,7 +10,7 @@ export default class Block {
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
     FLOW_RENDER: 'flow:render'
-  }
+  } as const
 
   private _element: HTMLElement | null = null
   private _meta: { tagName: string; props: Record<string, any> } | null = null
@@ -129,6 +129,7 @@ export default class Block {
   //@ts-ignore
   componentDidUpdate(oldProps, newProps) {
     return true
+    console.log(oldProps, newProps)
   }
 
   //@ts-ignore

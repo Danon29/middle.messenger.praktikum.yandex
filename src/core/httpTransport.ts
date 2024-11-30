@@ -3,43 +3,49 @@ export const METHODS = {
   POST: 'POST',
   PUT: 'PUT',
   DELETE: 'DELETE'
-}
+} as const
 
 interface HttpOptions {
   timeout: number
   headers?: Record<string, string>
-  method: string
-  data?: Record<string, string | number | Object> // если data - это объект с ключами-строками и значениями-строками/числами
+  data?: Record<string, string | number | object>
 }
 
-function queryStringify(data: Record<string, string | number | Object> | null): string {
+function queryStringify(data: Record<string, string | number | object> | null): string {
   if (typeof data !== 'object' || data === null) {
     throw new Error('Data must be object')
   }
 
   const keys = Object.keys(data)
   return keys.reduce((result, key, index) => {
-    return `${result}${key}=${data[key]}${index < keys.length - 1 ? '&' : ''}`
+    const encodedKey = encodeURIComponent(key)
+    const encodedValue = encodeURIComponent(String(data[key]))
+    return `${result}${encodedKey}=${encodedValue}${index < keys.length - 1 ? '&' : ''}`
   }, '?')
 }
 export class HTTPTransport {
-  get = (url: string, options: HttpOptions = { timeout: 5000, method: METHODS.GET }) => {
-    return this.request(url, options, options.timeout)
+  get = (url: string, options: HttpOptions = { timeout: 5000 }) => {
+    return this.request(url, { ...options, method: METHODS.GET }, options.timeout)
   }
 
-  post = (url: string, options: HttpOptions = { timeout: 5000, method: METHODS.POST }) => {
-    return this.request(url, options, options.timeout)
+  post = (url: string, options: HttpOptions = { timeout: 5000 }) => {
+    return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
   }
 
-  put = (url: string, options: HttpOptions = { timeout: 5000, method: METHODS.PUT }) => {
-    return this.request(url, options, options.timeout)
+  put = (url: string, options: HttpOptions = { timeout: 5000 }) => {
+    return this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
   }
 
-  delete = (url: string, options: HttpOptions = { timeout: 5000, method: METHODS.DELETE }) => {
-    return this.request(url, options, options.timeout)
+  delete = (url: string, options: HttpOptions = { timeout: 5000 }) => {
+    return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout)
   }
 
-  request = (url: string, options: HttpOptions, timeout: number): Promise<XMLHttpRequest> => {
+  request = (
+    url: string,
+    options: HttpOptions & { method: (typeof METHODS)[keyof typeof METHODS] },
+    timeout: number
+  ): Promise<XMLHttpRequest> => {
+    debugger
     const { headers = {}, method, data } = options
 
     return new Promise(function (resolve, reject) {
