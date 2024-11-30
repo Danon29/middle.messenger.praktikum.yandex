@@ -11,6 +11,8 @@ interface HttpOptions {
   data?: Record<string, string | number | object>
 }
 
+type HttpRequest = (url: string, options: HttpOptions) => Promise<XMLHttpRequest>
+
 function queryStringify(data: Record<string, string | number | object> | null): string {
   if (typeof data !== 'object' || data === null) {
     throw new Error('Data must be object')
@@ -24,19 +26,19 @@ function queryStringify(data: Record<string, string | number | object> | null): 
   }, '?')
 }
 export class HTTPTransport {
-  get = (url: string, options: HttpOptions = { timeout: 5000 }) => {
+  get: HttpRequest = (url, options = { timeout: 5000 }) => {
     return this.request(url, { ...options, method: METHODS.GET }, options.timeout)
   }
 
-  post = (url: string, options: HttpOptions = { timeout: 5000 }) => {
+  post: HttpRequest = (url, options = { timeout: 5000 }) => {
     return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
   }
 
-  put = (url: string, options: HttpOptions = { timeout: 5000 }) => {
+  put: HttpRequest = (url, options = { timeout: 5000 }) => {
     return this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
   }
 
-  delete = (url: string, options: HttpOptions = { timeout: 5000 }) => {
+  delete: HttpRequest = (url, options = { timeout: 5000 }) => {
     return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout)
   }
 
@@ -45,7 +47,6 @@ export class HTTPTransport {
     options: HttpOptions & { method: (typeof METHODS)[keyof typeof METHODS] },
     timeout: number
   ): Promise<XMLHttpRequest> => {
-    debugger
     const { headers = {}, method, data } = options
 
     return new Promise(function (resolve, reject) {
