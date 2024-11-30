@@ -1,11 +1,10 @@
-@import '../../style';
+@use '../../style' as styles;
 
 .button {
   background-color: initial;
   font-weight: 700;
   cursor: pointer;
   user-select: none;
-  -webkit-user-select: none;
   border: none;
   max-height: 72px;
   font-size: 1.2rem;
@@ -34,8 +33,9 @@
     max-height: 64px;
     width: 100%;
 
-    @include gradientAnimation(10s);
-    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    @include styles.gradientAnimation(10s);
+
+    box-shadow: rgb(151 65 252 / 20%) 0 15px 30px -5px;
     box-sizing: border-box;
 
     &:active,
@@ -58,15 +58,6 @@
     &:hover span {
       background: none;
     }
-  }
-
-  &_icon,
-  &-icon-filled {
-    width: auto;
-  }
-
-  &_icon-filled:hover {
-    animation: none;
   }
 
   &_textColor {
