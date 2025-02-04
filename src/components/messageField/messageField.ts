@@ -1,7 +1,10 @@
 import Block from '../../core/block.ts'
 import { IconButton } from '../iconButton'
 import FormValidator from '../../utils/validator/FormValidator.ts'
-import TextArea from './textArea.ts'
+import { TextArea } from './textArea'
+import template from './template.hbs?raw'
+import { store } from '../../core/store.ts'
+import { chatController } from '../../controllers/chatController.ts'
 
 interface MessageFieldProps {
   placeholder: string
@@ -37,7 +40,11 @@ export default class MessageField extends Block {
       }),
       SendMessageButton: new IconButton({
         kind: 'arrowRight',
-        onClick: (e) => this.handleSubmit(e),
+        onClick: (e) => {
+          const isValid = this.handleSubmit(e)
+          const chatId = store.getState().currentChat
+          if (isValid && chatId) chatController.sendMessage(chatId, this.props.formState.message)
+        },
         type: 'icon-filled'
       })
     })
@@ -45,14 +52,7 @@ export default class MessageField extends Block {
     this.selfCheck = true
   }
 
-  render(): string {
-    return `
-      {{{ ClipButton }}}
-      {{{ InputMessage }}}
-      {{{ SendMessageButton }}}
-      {{#if errorMessage }}
-         <div class="textarea__error">{{errorMessage}}</div>
-      {{/if}}
-  `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

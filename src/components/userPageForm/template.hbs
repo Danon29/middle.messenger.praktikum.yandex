@@ -1,0 +1,19 @@
+<div class="user-page__goback-btn">
+  {{{ GoBackButton }}}
+</div>
+<div class="user-page__content">
+  <div class="user-page__header">
+    <div>{{{ UserAvatar }}}</div>
+    {{#if userName}}
+      <span class="user-page__user-name">{{userName}}</span>
+    {{/if}}
+  </div>
+  <form onsubmit="${this.props.onSubmit}">
+    <div class="user-page__body">
+      {{{inputs}}}
+    </div>
+    <div class="user-page_buttons">
+      {{{ Button label="Изменить данные" type="primary" }}}
+    </div>
+  </form>
+</div>

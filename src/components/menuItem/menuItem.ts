@@ -1,10 +1,12 @@
 import Block from '../../core/block.ts'
 import { SvgIcon } from '../svgIcon'
+import template from './template.hbs?raw'
 
 interface MenuItemProps {
   iconSize: string
   src: string
   label: string
+  onClick?: (e: Event) => void
 }
 
 export default class MenuItem extends Block {
@@ -16,14 +18,14 @@ export default class MenuItem extends Block {
         iconType: 'icon',
         iconSize: props.iconSize,
         src: props.src
-      })
+      }),
+      events: {
+        click: props.onClick
+      }
     })
   }
 
-  render(): string {
-    return `
-      {{{ MenuIcon }}}
-      <span class="menu-item__label">{{label}}</span>
-    `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

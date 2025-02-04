@@ -1,4 +1,5 @@
 import Block from '../../core/block.ts'
+import template from './template.hbs?raw'
 
 interface SvgIconProps {
   iconType: string
@@ -14,9 +15,7 @@ export default class SvgIcon extends Block {
     })
   }
 
-  render(): string {
-    return `
-    <img src='{{src}}' alt='icon' />
-    `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

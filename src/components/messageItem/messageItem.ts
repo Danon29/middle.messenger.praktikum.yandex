@@ -1,4 +1,5 @@
 import Block from '../../core/block.ts'
+import template from './template.hbs?raw'
 
 export interface MessageItemProps {
   text: string
@@ -15,17 +16,7 @@ export default class MessageItem extends Block {
     })
   }
 
-  render(): string {
-    return `
-        <p class="message__text">{{text}}</p>
-        <div class="message__wrapper">
-          {{#if isRead }}
-            {{#if isOwnMessage }}
-              <span class="message__read-status">✔️</span>
-            {{/if}}
-          {{/if}}
-          <span class="message__time">{{time}}</span>
-        </div>
-    `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

@@ -1,6 +1,7 @@
 import Block from '../../core/block.ts'
 import { IconButton } from '../iconButton'
-import SearchInput from './searchInput.ts'
+import { SearchInput } from './searchInput'
+import template from './template.hbs?raw'
 
 interface SearchFieldProps {
   placeholder: string
@@ -21,10 +22,7 @@ export default class SearchField extends Block {
     })
   }
 
-  render(): string {
-    return `
-          {{{ SearchButton }}}
-          {{{ InputSearch }}}
-    `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

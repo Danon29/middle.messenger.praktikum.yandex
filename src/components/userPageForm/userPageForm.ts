@@ -1,11 +1,13 @@
 import Block from '../../core/block.ts'
 import { IconButton } from '../iconButton'
 import { Avatar } from '../avatar'
+import template from './template.hbs?raw'
+import { router } from '../../core/Router.ts'
 
 interface UserPageProps {
-  inputs: string
-  buttons: string
-  onSubmit: (e: Event) => void
+  inputs: any[]
+  buttons: any[]
+  onSubmit?: (e: Event) => void
   userName?: string
 }
 
@@ -16,7 +18,7 @@ export default class UserPageForm extends Block {
       className: 'user-page',
       GoBackButton: new IconButton({
         kind: 'arrowLeft',
-        onClick: () => console.log('avatar changed'),
+        onClick: () => router.go('/'),
         type: 'icon-filled'
       }),
       UserAvatar: new Avatar({
@@ -26,27 +28,7 @@ export default class UserPageForm extends Block {
     })
   }
 
-  render(): string {
-    return `
-      <div class="user-page__goback-btn">
-        {{{ GoBackButton }}}
-      </div>
-      <div class="user-page__content">
-          <div class="user-page__header">
-              <div>{{{ UserAvatar }}}</div>
-              {{#if userName}}
-                  <span class="user-page__user-name">{{userName}}</span>
-              {{/if}}
-          </div>
-        <form onsubmit="${this.props.onSubmit}">
-          <div class="user-page__body">
-              ${this.props.inputs}
-          </div>
-          <div class="user-page_buttons">
-            ${this.props.buttons}
-          </div>
-        </form>
-      </div>
-    `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

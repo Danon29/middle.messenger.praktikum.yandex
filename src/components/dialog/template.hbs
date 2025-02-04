@@ -1,0 +1,15 @@
+<dialog {{#if open}}open{{/if}}>
+  <h2 class="dialog__title{{#if errorMessage}} error{{/if}}">{{title}}</h2>
+  {{#if Content }}
+    <div class="dialog__body">
+      {{{ Content }}}
+    </div>
+  {{/if}}
+  <div class="dialog__footer">
+    {{{ ConfirmButton }}}
+    {{{ CloseButton }}}
+    {{#if errorMessage }}
+      <span class="dialog__action-error-message">{{errorMessage}}</span>
+    {{/if}}
+  </div>
+</dialog>

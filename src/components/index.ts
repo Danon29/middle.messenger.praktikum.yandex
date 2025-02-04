@@ -1,5 +1,5 @@
 export { Button } from './button'
-export { InputField } from './input'
+export { InputField } from './inputField'
 export { FormElement } from './formElement'
 export { SvgIcon } from './svgIcon'
 export { MenuItem } from './menuItem'

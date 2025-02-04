@@ -50,6 +50,7 @@ export default class FormValidator {
         error = isValid ? '' : 'Некорректный email'
         break
       case 'password':
+      case 'old_password':
         isValid = this.regularExpressions.password.test(value)
         error = isValid ? '' : 'Пароль должен содержать от 8 до 40 символов, одну заглавную букву и цифру'
         break

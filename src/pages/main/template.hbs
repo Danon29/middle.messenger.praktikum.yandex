@@ -1,0 +1,36 @@
+<div class="left-side">
+  <div class="left-side__header">
+    <div class="left-side__header-button">
+      {{{ ProfileButton }}}
+    </div>
+    <div class="left-side__search">
+      {{{ SearchField }}}
+    </div>
+  </div>
+  <div class="left-side__create-chat-button">
+    {{{CreateChatButton}}}
+  </div>
+  {{{ ChatsList }}}
+</div>
+{{#if isModalOpen}}{{{modalWindow}}}{{/if}}
+<div class="right-side">
+  <div class="right-side__header">
+    <div class="right-side__user-info">
+      <div class="right-side__avatar">
+        {{{ FriendsAvatar }}}
+      </div>
+      <div class="right-side__user-name">{{chatTitle}}</div>
+    </div>
+    <div class="right-side__user-button">
+      {{{ AddUserButton }}}
+      {{{ RemoveUserButton }}}
+      {{{ DeleteChatButton }}}
+    </div>
+  </div>
+  <div class="right-side__content">
+    {{{ messageList }}}
+  </div>
+  <div class="right-side__footer">
+    {{{ MessageField }}}
+  </div>
+</div>
