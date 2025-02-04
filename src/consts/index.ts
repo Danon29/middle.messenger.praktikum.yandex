@@ -1,26 +1,21 @@
 import * as Pages from '../pages'
+import { AppState } from '../App.ts'
 
-export const pages: unknown = {
-  errorPage404: [
-    Pages.ErrorPage,
-    {
+export const initialState: any = {
+  currentPage: 'main',
+  pages: {
+    errorPage404: {
       errorCode: '404',
       infoMessage: 'Не туда попали',
       buttonLabel: 'Назад к чатам'
-    }
-  ],
-  errorPage: [
-    Pages.ErrorPage,
-    {
+    },
+    errorPage500: {
       errorCode: '500',
       infoMessage: 'Мы уже фиксим',
       buttonLabel: 'Назад к чатам'
-    }
-  ],
-  userChangeAvatar: [Pages.UserPage, {}],
-  userEditPassword: [
-    Pages.UserPage,
-    {
+    },
+    userChangeAvatar: {},
+    userEditPassword: {
       inputs: [
         {
           label: 'Старый пароль',
@@ -28,7 +23,13 @@ export const pages: unknown = {
           value: 'someValueforPassword',
           version: 'userPage'
         },
-        { label: 'Новый пароль', type: 'password', name: 'password', value: 'someNewValue', version: 'userPage' },
+        {
+          label: 'Новый пароль',
+          type: 'password',
+          name: 'password',
+          value: 'someNewValue',
+          version: 'userPage'
+        },
         {
           label: 'Повторите новый пароль',
           type: 'password',
@@ -52,11 +53,8 @@ export const pages: unknown = {
         password: '',
         password_again: ''
       }
-    }
-  ],
-  userProfile: [
-    Pages.UserPage,
-    {
+    },
+    userProfile: {
       inputs: [
         {
           label: 'Почта',
@@ -65,11 +63,42 @@ export const pages: unknown = {
           disabled: true,
           version: 'userPage'
         },
-        { label: 'Логин', name: 'login', value: 'Vasya', disabled: true, version: 'userPage' },
-        { label: 'Имя', name: 'first_name', value: 'Василий', disabled: true, version: 'userPage' },
-        { label: 'Фамилия', name: 'second_name', value: 'Иванов', disabled: true, version: 'userPage' },
-        { label: 'Имя в чате', name: 'phone', value: 'Pupkin', disabled: true, version: 'userPage' },
-        { label: 'Телефон', type: 'tel', name: 'phone', value: '+7(923)3123311', disabled: true, version: 'userPage' }
+        {
+          label: 'Логин',
+          name: 'login',
+          value: 'Vasya',
+          disabled: true,
+          version: 'userPage'
+        },
+        {
+          label: 'Имя',
+          name: 'first_name',
+          value: 'Василий',
+          disabled: true,
+          version: 'userPage'
+        },
+        {
+          label: 'Фамилия',
+          name: 'second_name',
+          value: 'Иванов',
+          disabled: true,
+          version: 'userPage'
+        },
+        {
+          label: 'Имя в чате',
+          name: 'phone',
+          value: 'Pupkin',
+          disabled: true,
+          version: 'userPage'
+        },
+        {
+          label: 'Телефон',
+          type: 'tel',
+          name: 'phone',
+          value: '+7(923)3123311',
+          disabled: true,
+          version: 'userPage'
+        }
       ],
       buttons: [
         {
@@ -77,14 +106,20 @@ export const pages: unknown = {
           type: 'primary',
           submit: true
         },
-        { label: 'Изменить пароль', type: 'link', onClick: () => console.log('changed password') },
-        { label: 'Выйти', type: 'link', textColor: 'cancel', onClick: () => console.log('log out') }
+        {
+          label: 'Изменить пароль',
+          type: 'link',
+          onClick: () => console.log('changed password')
+        },
+        {
+          label: 'Выйти',
+          type: 'link',
+          textColor: 'cancel',
+          onClick: () => console.log('log out')
+        }
       ]
-    }
-  ],
-  userEdit: [
-    Pages.UserPage,
-    {
+    },
+    userEdit: {
       inputs: [
         {
           label: 'Почта',
@@ -93,11 +128,41 @@ export const pages: unknown = {
           disabled: false,
           version: 'userPage'
         },
-        { label: 'Логин', name: 'login', value: 'Vasya', disabled: false, version: 'userPage' },
-        { label: 'Имя', name: 'first_name', value: 'Василий', disabled: false, version: 'userPage' },
-        { label: 'Фамилия', name: 'second_name', value: 'Иванов', disabled: false, version: 'userPage' },
-        { label: 'Имя в чате', value: 'Pupkin', disabled: false, version: 'userPage' },
-        { label: 'Телефон', type: 'tel', name: 'phone', value: '+7(923)3123311', disabled: false, version: 'userPage' }
+        {
+          label: 'Логин',
+          name: 'login',
+          value: 'Vasya',
+          disabled: false,
+          version: 'userPage'
+        },
+        {
+          label: 'Имя',
+          name: 'first_name',
+          value: 'Василий',
+          disabled: false,
+          version: 'userPage'
+        },
+        {
+          label: 'Фамилия',
+          name: 'second_name',
+          value: 'Иванов',
+          disabled: false,
+          version: 'userPage'
+        },
+        {
+          label: 'Имя в чате',
+          value: 'Pupkin',
+          disabled: false,
+          version: 'userPage'
+        },
+        {
+          label: 'Телефон',
+          type: 'tel',
+          name: 'phone',
+          value: '+7(923)3123311',
+          disabled: false,
+          version: 'userPage'
+        }
       ],
       buttons: [
         {
@@ -120,11 +185,8 @@ export const pages: unknown = {
         second_name: '',
         phone: ''
       }
-    }
-  ],
-  login: [
-    Pages.LoginPage,
-    {
+    },
+    login: {
       inputs: [
         {
           label: 'Логин',
@@ -147,11 +209,8 @@ export const pages: unknown = {
           type: 'link'
         }
       ]
-    }
-  ],
-  main: [
-    Pages.MainPage,
-    {
+    },
+    main: {
       chats: [
         {
           name: 'John Doe',
@@ -400,12 +459,8 @@ export const pages: unknown = {
           isOwnMessage: true
         }
       ]
-    }
-  ],
-  nav: [Pages.NavigatePage, {}],
-  register: [
-    Pages.RegisterPage,
-    {
+    },
+    register: {
       inputs: [
         {
           label: 'Почта',
@@ -452,5 +507,5 @@ export const pages: unknown = {
         }
       ]
     }
-  ]
+  }
 }

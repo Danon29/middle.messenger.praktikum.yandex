@@ -1,6 +1,7 @@
 import Block from '../../core/block.ts'
 import { ChatItem } from '../chatItem'
 import { ChatItemProps } from '../chatItem/chatItem.ts'
+import template from './template.hbs?raw'
 
 interface ChatListProps {
   chats: ChatItemProps[]
@@ -27,7 +28,7 @@ export default class ChatList extends Block {
     })
   }
 
-  render(): string {
+  render() {
     const { activeIndex } = this.props
     const { chats } = this.children
 
@@ -46,10 +47,6 @@ export default class ChatList extends Block {
       chats.setProps({ active: true })
     }
 
-    return `
-      {{#each chats}}
-        {{{ this }}}
-      {{/each}}
-    `
+    return this.compile(template as string, this.props)
   }
 }

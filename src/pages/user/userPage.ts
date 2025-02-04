@@ -1,7 +1,7 @@
 import Block from '../../core/block.ts'
 import { Avatar, Button, IconButton, InputField, UserPageForm } from '../../components'
 import FormValidator from '../../utils/validator/FormValidator.ts'
-import { InputFieldProps } from '../../components/input/inputField.ts'
+import { InputFieldProps } from '../../components/inputField/inputField.ts'
 import { ButtonProps } from '../../components/button/button.ts'
 
 export interface UserPageProps {

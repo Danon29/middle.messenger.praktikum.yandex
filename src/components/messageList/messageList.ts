@@ -1,6 +1,7 @@
 import Block from '../../core/block.ts'
 import { MessageItemProps } from '../messageItem/messageItem.ts'
 import { MessageItem } from '../messageItem'
+import template from './template.hbs?raw'
 
 interface MessageListProps {
   messages: MessageItemProps[]
@@ -23,11 +24,7 @@ export default class MessageList extends Block {
     })
   }
 
-  render(): string {
-    return `
-      {{#each messages}}
-        {{{ this }}}
-      {{/each}} 
-    `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

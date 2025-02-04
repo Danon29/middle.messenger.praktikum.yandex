@@ -1,7 +1,8 @@
 import Block from '../../core/block.ts'
 import { IconButton } from '../iconButton'
 import FormValidator from '../../utils/validator/FormValidator.ts'
-import TextArea from './textArea.ts'
+import { TextArea } from './textArea'
+import template from './template.hbs?raw'
 
 interface MessageFieldProps {
   placeholder: string
@@ -45,14 +46,7 @@ export default class MessageField extends Block {
     this.selfCheck = true
   }
 
-  render(): string {
-    return `
-      {{{ ClipButton }}}
-      {{{ InputMessage }}}
-      {{{ SendMessageButton }}}
-      {{#if errorMessage }}
-         <div class="textarea__error">{{errorMessage}}</div>
-      {{/if}}
-  `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

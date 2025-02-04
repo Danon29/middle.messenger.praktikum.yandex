@@ -1,4 +1,5 @@
 import Block from '../../core/block.ts'
+import template from './template.hbs?raw'
 
 type ButtonTypes = 'link' | 'primary'
 
@@ -25,9 +26,7 @@ export default class Button extends Block {
     })
   }
 
-  render(): string {
-    return `
-      <span>{{label}}</span>
-    `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

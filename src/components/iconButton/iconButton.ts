@@ -31,13 +31,9 @@ export default class IconButton extends Block {
     })
   }
 
-  render(): string {
+  render() {
     const svgSource = ICONS_SVG_SOURCE[this.props.kind as keyof typeof ICONS_SVG_SOURCE]
 
-    if (typeof svgSource !== 'string') {
-      return ''
-    }
-
-    return svgSource
+    return this.compile(svgSource as string, this.props)
   }
 }
