@@ -13,55 +13,56 @@ import {
   SearchField
 } from '../../components'
 import { ChatItemProps } from '../../components/chatItem/chatItem.ts'
-import { MessageItemProps } from '../../components/messageItem/messageItem.ts'
 import template from './template.hbs?raw'
 import { router } from '../../core/Router.ts'
 import { store } from '../../core/store.ts'
 import { chatAPI } from '../../api/chatApi.ts'
 import { chatController } from '../../controllers/chatController.ts'
 import formatDate from '../../utils/formatDate.ts'
+import { authController } from '../../controllers/authController.ts'
+import { DialogProps } from '../../components/dialog/dialog.ts'
+import { StoreType } from '../../types'
 
 const getChatTitle = () => {
-  return store.getState().chats.find((chat) => chat.id === store.getState().currentChat)?.title ?? 'Без названия'
-}
-
-interface MainPageProps {
-  chats: ChatItemProps[]
-  messages: MessageItemProps[]
+  return (
+    store.getState().chats.find((chat: ChatItemProps) => chat.id === store.getState().currentChat)?.title ??
+    'Без названия'
+  )
 }
 
 export default class MainPage extends Block {
-  constructor(props: MainPageProps) {
+  constructor(props: StoreType) {
     super('div', {
       ...props,
       className: 'main-page',
+      currentChat: null,
       isModalOpen: false,
       ProfileButton: new MenuItem({
         src: '/public/icons/person.svg',
         label: 'Профиль',
         iconSize: 'small',
         onClick: () => {
-          router.go('/profile')
+          router.go('/settings')
         }
       }),
       AddUserButton: new IconButton({
         kind: 'add',
         onClick: () => {
-          this.children.modalWindow = new Dialog(this.getModalProps('addUserToChat'))
+          this.children.modalWindow = new Dialog(this.getModalProps('addUserToChat') as DialogProps)
           this.setProps({ isModalOpen: true })
         }
       }),
       RemoveUserButton: new IconButton({
         kind: 'remove',
         onClick: () => {
-          this.children.modalWindow = new Dialog(this.getModalProps('removeUserFromChat'))
+          this.children.modalWindow = new Dialog(this.getModalProps('removeUserFromChat') as DialogProps)
           this.setProps({ isModalOpen: true })
         }
       }),
       DeleteChatButton: new IconButton({
         kind: 'delete',
         onClick: () => {
-          this.children.modalWindow = new Dialog(this.getModalProps('deleteChat'))
+          this.children.modalWindow = new Dialog(this.getModalProps('deleteChat') as DialogProps)
           this.setProps({ isModalOpen: true })
         }
       }),
@@ -69,23 +70,21 @@ export default class MainPage extends Block {
         label: 'Создать чат',
         type: 'link',
         onClick: () => {
-          this.children.modalWindow = new Dialog(this.getModalProps('createChat'))
+          this.children.modalWindow = new Dialog(this.getModalProps('createChat') as DialogProps)
           this.setProps({ isModalOpen: true })
         }
       }),
       SearchField: new SearchField({ type: 'search', placeholder: 'Поиск' }),
       MessageField: new MessageField({ placeholder: 'Введите сообщение' }),
-      ChatsList: new ChatList({
-        chats: props.chats.map((chat) => new ChatItem({ ...chat }))
-      }),
-      FriendsAvatar: new Avatar({ size: 'medium', clickable: false, imageUrl: '/public/icons/aXlZ17nbvD8.jpg' }),
+      ChatsList: new ChatList({ chats: [] }),
+      FriendsAvatar: new Avatar({ size: 'medium', clickable: false }),
       chatTitle: getChatTitle(),
-      messageList: new MessageList(),
+      messageList: new MessageList({}),
       modalWindow: null
     })
 
-    chatAPI.getChats().then((data) => {
-      const newChats: ChatItemProps[] = JSON.parse(data.responseText).map((chat) => ({
+    chatController.getChats().then((data) => {
+      const newChats: ChatItemProps[] = JSON.parse(data.responseText).map((chat: ChatItemProps) => ({
         title: chat.title,
         time: chat.last_message ? formatDate(chat.last_message.time) : '',
         content: chat.last_message ? chat.last_message.content : 'новое сообщение',
@@ -101,18 +100,20 @@ export default class MainPage extends Block {
         chats: newChats.map((chat) => new ChatItem({ ...chat }))
       })
       this.eventBus().emit('flow:component-did-update')
+
+      authController.getUserData()
     })
   }
 
   setCurrentChat(id: number) {
-    const currentChat = store.getState().chats.find((chat) => chat.id === id)
+    const currentChat = store.getState().chats.find((chat: ChatItemProps) => chat.id === id)
     this.setProps({ currentChat: currentChat, chatTitle: currentChat.title })
     store.setState('currentChat', currentChat.id)
+    this.setProps({ currentChat: currentChat.id })
     chatController.connectToChat(id)
   }
 
   getModalProps(type: string) {
-    debugger
     switch (type) {
       case 'createChat':
         return {
@@ -127,12 +128,28 @@ export default class MainPage extends Block {
             submit: false,
             onClick: async () => {
               const inputValue = (this.children.modalWindow as any).children?.Content?.children?.Input?._element?.value
-              console.log('Название чата:', inputValue)
               if (!inputValue) return
               await chatAPI.createChat({ title: inputValue }).then(() => this.setProps({ isModalOpen: false }))
+              await chatController.getChats().then((data) => {
+                const newChats: ChatItemProps[] = JSON.parse(data.responseText).map((chat: ChatItemProps) => ({
+                  title: chat.title,
+                  time: chat.last_message ? formatDate(chat.last_message.time) : '',
+                  content: chat.last_message ? chat.last_message.content : 'новое сообщение',
+                  unread_count: chat.unread_count,
+                  isOwnMessage: true,
+                  active: false,
+                  id: chat.id,
+                  onClick: this.setCurrentChat.bind(this)
+                }))
+                store.setState('chats', newChats)
+
+                this.children.ChatsList = new ChatList({
+                  chats: newChats.map((chat) => new ChatItem({ ...chat }))
+                })
+                this.eventBus().emit('flow:component-did-update')
+              })
             }
           }),
-          open: true,
           onClose: () => this.setProps({ isModalOpen: false })
         }
       case 'addUserToChat':
@@ -186,14 +203,36 @@ export default class MainPage extends Block {
             type: 'primary',
             submit: false,
             onClick: async () => {
-              const chatId = this.props.currentChat.id
-              if (chatId) await chatController.deleteChat(chatId).then(() => this.setProps({ isModalOpen: false }))
+              const chatId = this.props.currentChat
+              if (chatId) {
+                await chatController.deleteChat(chatId).then(() => this.setProps({ isModalOpen: false }))
+                await chatController.getChats().then((data) => {
+                  const newChats: ChatItemProps[] = JSON.parse(data.responseText).map((chat: ChatItemProps) => ({
+                    title: chat.title,
+                    time: chat.last_message ? formatDate(chat.last_message.time) : '',
+                    content: chat.last_message ? chat.last_message.content : 'новое сообщение',
+                    unread_count: chat.unread_count,
+                    isOwnMessage: true,
+                    active: false,
+                    id: chat.id,
+                    onClick: this.setCurrentChat.bind(this)
+                  }))
+                  store.setState('chats', newChats)
+
+                  this.children.ChatsList = new ChatList({
+                    chats: newChats.map((chat) => new ChatItem({ ...chat }))
+                  })
+                  this.eventBus().emit('flow:component-did-update')
+                })
+              }
             }
           }),
           onClose: () => this.setProps({ isModalOpen: false })
         }
     }
   }
+
+  updateChatList() {}
 
   render() {
     return this.compile(template as string, { ...this.props, modalWindow: this.children.modalWindow })

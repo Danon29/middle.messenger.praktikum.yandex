@@ -1,5 +1,5 @@
 import Block from '../../../core/block.ts'
-
+import template from './template.hbs?raw'
 interface TextAreaProps {
   placeholder: string
   events: { [key: string]: (e: InputEvent) => void }
@@ -7,13 +7,17 @@ interface TextAreaProps {
 
 export default class TextArea extends Block {
   constructor(props: TextAreaProps) {
-    super('textarea', {
+    super('div', {
       ...props,
-      attrs: {
-        placeholder: props.placeholder,
-        rows: 1,
-        name: 'message'
-      }
+      className: 'wrapper',
+      placeholder: props.placeholder,
+      rows: 1,
+      name: 'message',
+      value: ''
     })
+  }
+
+  render(): Node | string {
+    return this.compile(template as string, this.props)
   }
 }

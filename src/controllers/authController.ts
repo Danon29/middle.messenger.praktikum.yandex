@@ -12,31 +12,41 @@ class AuthController {
     })
   }
 
-  public getUserIsAuthed() {
-    return authAPI
-      .getUserInfo()
-      .then(() => {
-        return true
-      })
-      .catch(() => {
-        return false
-      })
+  public async getUserIsAuthed() {
+    try {
+      await authAPI.getUserInfo()
+      return true
+    } catch (err) {
+      console.log(err)
+      return false
+    }
   }
 
-  public login(data: { login: string; password: string }) {
-    return authAPI
-      .login(data)
-      .then(() => {
-        this.getUserData().then(() => router.go('/'))
-      })
-      .catch((err) => console.log(err))
+  public async login(data: { login: string; password: string }) {
+    try {
+      await authAPI.login(data)
+      await this.getUserData()
+        .then(() => router.go('/messenger'))
+        .catch((err) => console.log(err))
+    } catch (err) {
+      console.log(err)
+    }
   }
 
-  public register(data: UserType) {
+  public async register(data: UserType) {
     return authAPI
       .register(data)
-      .then((data) => console.log(data))
+      .then(() => router.go('/sign-in'))
       .catch((err) => console.log(err))
+  }
+
+  public async logout() {
+    try {
+      await authAPI.logout()
+      router.go('/sign-in')
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 

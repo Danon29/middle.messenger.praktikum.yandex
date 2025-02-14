@@ -5,14 +5,19 @@ interface AvatarProps {
   size: 'big' | 'small' | 'medium'
   imageUrl?: string
   clickable?: boolean
-  onClick?: () => void
+  onClick?: (e: MouseEvent) => void
 }
 
 export default class Avatar extends Block {
   constructor(props: AvatarProps) {
     super('div', {
       ...props,
-      className: `avatar avatar--${props.size}`
+      className: `avatar avatar--${props.size}`,
+      events: {
+        click: (e: MouseEvent) => {
+          if (props.onClick) props.onClick(e)
+        }
+      }
     })
   }
 

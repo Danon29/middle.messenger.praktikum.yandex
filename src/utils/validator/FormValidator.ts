@@ -73,6 +73,10 @@ export default class FormValidator {
         isValid = this.regularExpressions.message.test(value)
         error = isValid ? '' : 'Сообщение не должно быть пустым'
         break
+      case 'display_name':
+        isValid = value.length !== 0
+        error = isValid ? '' : 'Не должно быть пустым'
+        break
       default:
         isValid = true
         break

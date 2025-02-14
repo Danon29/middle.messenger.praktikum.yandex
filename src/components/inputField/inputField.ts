@@ -1,6 +1,6 @@
 import Block from '../../core/block.ts'
-import Input from './input/input.ts'
 import template from './template.hbs?raw'
+import { Input } from './input'
 
 export interface InputFieldProps {
   label: string
@@ -21,7 +21,8 @@ export default class InputField extends Block {
       Input: new Input({
         className: 'input__element',
         events: {
-          change: props.onChange || (() => {})
+          change: props.onChange || (() => {}),
+          submit: (e) => e.preventDefault()
         },
         disabled: props.disabled,
         type: props.type,

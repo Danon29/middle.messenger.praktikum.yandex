@@ -2,6 +2,7 @@ import Block from './block.ts'
 import { store, StoreEvents } from './store.ts'
 import { Indexed } from '../types'
 import isEqual from '../utils/isEqual.ts'
+import { deepClone } from '../utils/cloneDeep.ts'
 
 export function connect<P>(
   Component: typeof Block,
@@ -14,18 +15,18 @@ export function connect<P>(
       let fullState = store.getState()
       let selectedState = selector(fullState)
 
-      super({ ...props, ...selectedState } as P)
+      //@ts-ignore
+      super({ ...props, ...selectedState })
 
-      this.currentState = selectedState
+      this.currentState = deepClone(selectedState)
 
       store.on(StoreEvents.Updated, () => {
-        const newFullState = store.getState()
-        const newSelectedState = selector(newFullState)
-
-        if (!isEqual(this.currentState, newSelectedState)) {
-          ;(this as Block).setProps({ ...newSelectedState })
-          this.currentState = newSelectedState
+        const newState = selector(store.getState())
+        if (!isEqual(this.currentState, newState)) {
+          ;(this as Block).setProps({ ...newState })
         }
+
+        this.currentState = newState
       })
     }
   }

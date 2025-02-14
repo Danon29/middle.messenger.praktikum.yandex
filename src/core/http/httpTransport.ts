@@ -14,35 +14,23 @@ interface HttpOptions {
 
 type HttpRequest = (url: string, options: HttpOptions) => Promise<XMLHttpRequest>
 
-function queryStringify(data: Record<string, string | number | object> | null): string {
-  if (typeof data !== 'object' || data === null) {
-    throw new Error('Data must be object')
-  }
-
-  const keys = Object.keys(data)
-  return keys.reduce((result, key, index) => {
-    const encodedKey = encodeURIComponent(key)
-    const encodedValue = encodeURIComponent(String(data[key]))
-    return `${result}${encodedKey}=${encodedValue}${index < keys.length - 1 ? '&' : ''}`
-  }, '?')
-}
 export class HTTPTransport {
   private _websocket: WebSocket | null = null
 
   get: HttpRequest = (url, options = { timeout: 5000 }) => {
-    return this.request(url, { ...options, method: METHODS.GET }, options.timeout)
+    return this.request(url, { ...options, method: METHODS.GET }, options.timeout ?? 5000)
   }
 
   post: HttpRequest = (url, options = { timeout: 5000 }) => {
-    return this.request(url, { ...options, method: METHODS.POST }, options.timeout)
+    return this.request(url, { ...options, method: METHODS.POST }, options.timeout ?? 5000)
   }
 
   put: HttpRequest = (url, options = { timeout: 5000 }) => {
-    return this.request(url, { ...options, method: METHODS.PUT }, options.timeout)
+    return this.request(url, { ...options, method: METHODS.PUT }, options.timeout ?? 5000)
   }
 
   delete: HttpRequest = (url, options = { timeout: 5000 }) => {
-    return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout)
+    return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout ?? 5000)
   }
 
   request = (
@@ -62,7 +50,7 @@ export class HTTPTransport {
       const xhr = new XMLHttpRequest()
       const isGet = method === METHODS.GET
 
-      xhr.open(method, isGet && data ? `${url}${queryStringify(data)}` : url)
+      xhr.open(method, url)
 
       Object.keys(headers).forEach((key) => {
         xhr.setRequestHeader(key, headers[key])

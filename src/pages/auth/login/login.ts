@@ -32,7 +32,7 @@ const buttons: ButtonProps[] = [
   {
     label: 'Нет аккаунта? ',
     type: 'link',
-    onClick: () => router.go('/register')
+    onClick: () => router.go('/sign-up')
   }
 ]
 
@@ -47,9 +47,9 @@ export default class LoginPage extends Block {
             type: button.type,
             submit: button.submit,
             onClick: button.submit
-              ? (e) => {
+              ? async (e) => {
                   const isValid = this.handleSubmit(e)
-                  if (isValid) authController.login(this.props.formState)
+                  if (isValid) await authController.login(this.props.formState)
                 }
               : (e) => {
                   if (button.onClick) button.onClick(e)
@@ -64,7 +64,13 @@ export default class LoginPage extends Block {
             type: input.type,
             onChange: (e) => this.handleInputChange(e)
           })
-      )
+      ),
+      events: {
+        submit: async (e: Event) => {
+          const isValid = this.handleSubmit(e)
+          if (isValid) await authController.login(this.props.formState)
+        }
+      }
     })
 
     super('div', {

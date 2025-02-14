@@ -8,6 +8,7 @@ type InputProps = {
   label: string
   events: { [key: string]: (e: InputEvent) => void }
   value?: string
+  placeholder?: string
 }
 
 export default class Input extends Block {
@@ -15,7 +16,7 @@ export default class Input extends Block {
     super('input', {
       ...props,
       attrs: {
-        placeholder: '',
+        placeholder: props.placeholder ?? '',
         ...(props.disabled ? { disabled: 'disabled' } : {}),
         type: props.type,
         id: props.label,
@@ -23,5 +24,12 @@ export default class Input extends Block {
         ...(props.value ? { value: props.value } : {})
       }
     })
+  }
+
+  componentDidUpdate(oldProps: InputProps, newProps: InputProps): boolean {
+    if (oldProps.value !== newProps.value) {
+      ;(this.element as HTMLInputElement).value = newProps.value || ''
+    }
+    return true
   }
 }

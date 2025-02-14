@@ -1,8 +1,15 @@
 import Block from '../../core/block.ts'
 import template from './template.hbs?raw'
 import { Button } from '../button'
+
+export interface DialogProps {
+  Content?: Block | Block[]
+  ConfirmButton: Button
+  onClose: () => void
+}
+
 export default class Dialog extends Block {
-  constructor(props) {
+  constructor(props: DialogProps) {
     super('div', {
       ...props,
       className: 'dialog-container',
@@ -16,7 +23,6 @@ export default class Dialog extends Block {
   }
 
   render(): Node | string {
-    console.log(this.props)
     return this.compile(template as string, this.props)
   }
 }

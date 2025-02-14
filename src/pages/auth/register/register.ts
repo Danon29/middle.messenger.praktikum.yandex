@@ -55,7 +55,7 @@ const buttons: ButtonProps[] = [
   {
     label: 'Войти',
     type: 'link',
-    onClick: () => router.go('/login')
+    onClick: () => router.go('/sign-in')
   }
 ]
 
@@ -70,9 +70,9 @@ export default class LoginPage extends Block {
             type: button.type,
             submit: button.submit,
             onClick: button.submit
-              ? (e) => {
+              ? async (e) => {
                   const isValid = this.handleSubmit(e)
-                  if (isValid) authController.register(this.props.formState)
+                  if (isValid) await authController.register(this.props.formState)
                 }
               : (e) => {
                   if (button.onClick) button.onClick(e)

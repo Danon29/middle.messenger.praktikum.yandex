@@ -10,22 +10,33 @@ export type Indexed<T = unknown> = {
 export type TProps = Record<string, string | Function | unknown>
 
 export type StoreType = {
-  user: Omit<UserType, 'password'> | {}
+  user: Omit<UserType, 'password'>
   chats: any[]
   messages: []
   isEditing: boolean
   currentChat: number | undefined
 }
 
+export type MessageType = {
+  chat_id: number
+  content: string
+  file?: null
+  id: number
+  is_read: boolean
+  time: string
+  type: string
+  user_id: number
+}
+
 export type UserType = {
-  id?: string | null
+  id?: number | null
   first_name: string
   second_name: string
   display_name?: string
   avatar?: string
   login: string
   email: string
-  password: string
+  password?: string
   phone: string
 }
 

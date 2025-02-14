@@ -19,7 +19,7 @@ export default class Block {
   public _element: HTMLElement | null = null
   private _meta: { tagName: string; props: Record<string, any> } | null = null
   public id = nanoid(6)
-  protected eventBus: () => EventBus<string>
+  protected eventBus: () => EventBus
   public children: Record<string, Block | Block[]>
   public props: Record<string, any>
   protected validator: FormValidator | null = null
@@ -55,7 +55,7 @@ export default class Block {
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  _registerEvents(eventBus: EventBus<string>) {
+  _registerEvents(eventBus: EventBus) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this))
@@ -125,7 +125,6 @@ export default class Block {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
   }
 
-  // Не представляю как типизировать пропсы для разных компонентов, включая дочерних
   //@ts-ignore
   _componentDidUpdate(oldProps, newProps) {
     const response = this.componentDidUpdate(oldProps, newProps)
@@ -138,6 +137,7 @@ export default class Block {
   //@ts-ignore
   componentDidUpdate(oldProps, newProps) {
     return true
+    console.log(oldProps, newProps)
   }
 
   //@ts-ignore
@@ -259,7 +259,8 @@ export default class Block {
 
   //@ts-ignore
   _makePropsProxy(props) {
-    const self = this
+    const eventBus = this.eventBus()
+    const emitBind = eventBus.emit.bind(eventBus)
 
     return new Proxy(props as any, {
       get(target, prop) {
@@ -271,7 +272,7 @@ export default class Block {
         target[prop] = value
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
-        self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target)
+        emitBind(Block.EVENTS.FLOW_CDU, oldTarget, target)
         return true
       },
       deleteProperty(target, property) {

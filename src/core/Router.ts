@@ -1,35 +1,35 @@
 import Block from './block.ts'
-function isEqual(lhs, rhs) {
+function isEqual(lhs: string, rhs: string) {
   return lhs === rhs
 }
 
-function render(query: string, block: Block | null) {
-  const root = document.getElementById(query)
-  if (block) root.append(block.getContent())
-  return root
-}
+// function render(query: string, block: Block | null) {
+//   const root = document.getElementById(query)
+//   if (block) root.append(block.getContent())
+//   return root
+// }
 
 class Route {
   private _pathname: string
   private _blockClass: typeof Block
   private _block: null | Block
-  private _props: any
-  constructor(pathname, view, props) {
+  private _props: Record<string, unknown>
+  constructor(pathname: string, view: typeof Block, props: Record<string, unknown>) {
     this._pathname = pathname
     this._blockClass = view
     this._block = null
     this._props = props
   }
 
-  navigate(pathname: string) {
-    if (this.match(pathname)) {
-      this._pathname = pathname
-      this.render()
-    }
-  }
+  // navigate(pathname: string) {
+  //   if (this.match(pathname)) {
+  //     this._pathname = pathname
+  //     this.render()
+  //   }
+  // }
 
   leave() {
-    if (!this._block) {
+    if (this._block) {
       this._block.hide()
     }
   }
@@ -58,7 +58,6 @@ class Route {
     const root = document.querySelector(query)
     if (root) {
       root.innerHTML = ''
-      console.log(block.getContent())
       root.append(block.getContent()!)
     }
   }
@@ -69,7 +68,7 @@ class Route {
     if (!this._block || params) {
       //@ts-ignore
       this._block = new this._blockClass({ ...params })
-      this._renderDom(this._props.rootQuery, this._block)
+      this._renderDom(this._props.rootQuery as string, this._block)
       return
     }
     this._block.show()
@@ -78,10 +77,10 @@ class Route {
 
 export default class Router {
   private static __instance: Router
-  private history: History
-  private routes: Route[]
-  private _rootQuery: string
-  private _currentRoute: null | Route
+  private history!: History
+  private routes: Route[] = []
+  private readonly _rootQuery: string = ''
+  private _currentRoute: null | Route = null
   constructor(rootQuery: string) {
     if (Router.__instance) {
       return Router.__instance
@@ -93,21 +92,22 @@ export default class Router {
     this._rootQuery = rootQuery
   }
 
-  use(pathname: string, block: Block) {
+  use(pathname: string, block: typeof Block) {
     const route = new Route(pathname, block, { rootQuery: this._rootQuery })
     this.routes.push(route)
     return this
   }
 
   start() {
-    window.onpopstate = ((event) => {
-      this._onRoute(event.currentTarget.location.pathname)
+    window.onpopstate = ((event: PopStateEvent) => {
+      const target = event.currentTarget as Window
+      this._onRoute(target.location.pathname)
     }).bind(this)
 
     this._onRoute(window.location.pathname)
   }
 
-  _onRoute(pathname) {
+  _onRoute(pathname: string) {
     let route = this.getRoute(pathname)
     if (!route) {
       if (this._currentRoute) this._currentRoute.leave()

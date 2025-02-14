@@ -33,7 +33,7 @@ class AuthAPI {
     })
   }
 
-  logout() {
+  public logout() {
     return httpTransport.post(`${baseURL}/logout`, {
       withCredentials: true,
       headers: {

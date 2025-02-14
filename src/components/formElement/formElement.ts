@@ -1,12 +1,14 @@
 import Block from '../../core/block.ts'
 
 import template from './template.hbs?raw'
+import { InputField } from '../inputField'
+import { Button } from '../button'
 
 interface FormProps {
   title: string
-  inputs: (typeof Block)[] | string
-  buttons: (typeof Block)[] | string
-  onSubmit?: (e: Event) => void
+  inputs: InputField[]
+  buttons: Button[]
+  events?: Record<string, unknown>
 }
 
 export default class Form extends Block {

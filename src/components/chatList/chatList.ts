@@ -1,15 +1,14 @@
 import Block from '../../core/block.ts'
 import { ChatItem } from '../chatItem'
-import { ChatItemProps } from '../chatItem/chatItem.ts'
 import template from './template.hbs?raw'
 import { store } from '../../core/store.ts'
 
 interface ChatListProps {
-  chats: ChatItem[]
+  chats: ChatItem[] | []
 }
 
 export default class ChatList extends Block {
-  constructor(props) {
+  constructor(props: ChatListProps) {
     const chats = store.getState().chats
 
     super('div', {
@@ -19,9 +18,8 @@ export default class ChatList extends Block {
       chats: chats.map((chat) => new ChatItem({ ...chat }))
     })
 
-    console.log(chats)
     if (Array.isArray(this.children.chats)) {
-      this.children.chats.forEach((chat: ChatItem, index: number) => {
+      ;(this.children.chats as ChatItem[]).forEach((chat: ChatItem, index: number) => {
         chat.setProps({
           events: {
             click: () => {
@@ -54,7 +52,6 @@ export default class ChatList extends Block {
       chats.setProps({ active: true })
     }
 
-    const result = this.compile(template as string, this.props)
-    return result
+    return this.compile(template as string, this.props)
   }
 }

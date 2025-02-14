@@ -1,66 +1,71 @@
 import template from '../template.hbs?raw'
 import { InputFieldProps } from '../../../components/inputField/inputField.ts'
-import { ButtonProps } from '../../../components/button/button.ts'
+import { ButtonProps, ButtonTypes } from '../../../components/button/button.ts'
 import Block from '../../../core/block.ts'
 import { Button, InputField, UserPageForm } from '../../../components'
 import FormValidator from '../../../utils/validator/FormValidator.ts'
+import { UserType } from '../../../types'
+import { router } from '../../../core/Router.ts'
+import { userController } from '../../../controllers/userController.ts'
 
 export interface UserPageProps {
   inputs: InputFieldProps[]
   buttons: ButtonProps[]
-  formState?: { [key: string]: string }
-  errors?: { [key: string]: string }
+  user: Pick<UserType, 'password'>
 }
-
-const inputs: InputFieldProps[] = [
-  {
-    label: 'Старый пароль',
-    type: 'password',
-    value: 'someValueforPassword',
-    version: 'userPage',
-    name: 'old_password'
-  },
-  {
-    label: 'Новый пароль',
-    type: 'password',
-    name: 'password',
-    value: 'someNewValue',
-    version: 'userPage'
-  },
-  {
-    label: 'Повторите новый пароль',
-    type: 'password',
-    name: 'password_again',
-    value: 'someNewValue',
-    version: 'userPage'
-  }
-]
-
-const buttons = [
-  {
-    label: 'Сохранить',
-    type: 'primary',
-    submit: true
-  }
-]
 
 export default class UserPage extends Block {
   constructor(props: UserPageProps) {
     const form = new UserPageForm({
-      buttons: buttons.map(
+      buttons: [
+        {
+          label: 'Сохранить',
+          type: 'primary',
+          submit: true
+        }
+      ].map(
         (button) =>
           new Button({
             label: button.label,
-            type: button.type,
+            type: button.type as ButtonTypes,
             submit: button.submit,
-            onClick: button.submit
-              ? (e) => {
-                  this.handleSubmit(e)
-                }
-              : () => console.log('kek')
+            onClick: async (e) => {
+              const isValid = this.handleSubmit(e)
+              if (isValid) {
+                const { password, old_password } = this.props.formState
+                await userController
+                  .changePassword({ newPassword: password, oldPassword: old_password })
+                  .then(() => {
+                    router.back()
+                  })
+                  .catch((error) => console.log(error))
+              }
+            }
           })
       ),
-      inputs: inputs.map(
+      inputs: [
+        {
+          label: 'Старый пароль',
+          type: 'password',
+          value: '',
+          version: 'userPage',
+          name: 'old_password'
+        },
+        {
+          label: 'Новый пароль',
+          type: 'password',
+          name: 'password',
+          value: '',
+          version: 'userPage'
+        },
+        {
+          label: 'Повторите новый пароль',
+          type: 'password',
+          name: 'password_again',
+          value: '',
+          version: 'userPage'
+        }
+      ].map(
         (input) =>
           new InputField({
             label: input.label,
@@ -68,7 +73,7 @@ export default class UserPage extends Block {
             type: input?.type,
             onChange: (e) => this.handleInputChange(e),
             value: input.value,
-            disabled: input.disabled,
+            disabled: false,
             version: input.version
           })
       )
@@ -80,7 +85,7 @@ export default class UserPage extends Block {
       formState: {
         password: '',
         password_again: '',
-        old_password: ''
+        old_password: props.user.password
       },
       errors: {
         password: '',

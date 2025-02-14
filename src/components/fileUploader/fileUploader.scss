@@ -1,0 +1,19 @@
+.file-upload-button {
+  width: 10rem;
+  height: 2rem;
+  background-color: #2f80b7;
+  border-radius: 10px;
+  border: 1px white;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #65baff;
+  }
+}
+
+.file-name {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  color: white;
+}

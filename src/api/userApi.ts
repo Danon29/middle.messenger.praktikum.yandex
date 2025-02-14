@@ -14,15 +14,8 @@ class UserAPI {
     })
   }
 
-  updateUserAvatar(file: File) {
-    const formData = new FormData()
-    formData.append('avatar', file)
-
+  updateUserAvatar(formData: FormData) {
     return httpTransport.put(`${baseURL}/profile/avatar`, {
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
       data: formData
     })
   }

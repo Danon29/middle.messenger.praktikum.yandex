@@ -1,6 +1,3 @@
-import * as Pages from '../pages'
-import { AppState } from '../App.ts'
-
 export const initialState: any = {
   currentPage: 'main',
   pages: {

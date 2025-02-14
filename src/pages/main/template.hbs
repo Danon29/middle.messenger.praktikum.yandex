@@ -14,23 +14,27 @@
 </div>
 {{#if isModalOpen}}{{{modalWindow}}}{{/if}}
 <div class="right-side">
-  <div class="right-side__header">
-    <div class="right-side__user-info">
-      <div class="right-side__avatar">
-        {{{ FriendsAvatar }}}
+  {{#if currentChat }}
+    <div class="right-side__header">
+      <div class="right-side__user-info">
+        <div class="right-side__avatar">
+          {{{ FriendsAvatar }}}
+        </div>
+        <div class="right-side__user-name">{{chatTitle}}</div>
       </div>
-      <div class="right-side__user-name">{{chatTitle}}</div>
+      <div class="right-side__user-button">
+        {{{ AddUserButton }}}
+        {{{ RemoveUserButton }}}
+        {{{ DeleteChatButton }}}
+      </div>
     </div>
-    <div class="right-side__user-button">
-      {{{ AddUserButton }}}
-      {{{ RemoveUserButton }}}
-      {{{ DeleteChatButton }}}
+    <div class="right-side__content">
+      {{{ messageList }}}
     </div>
-  </div>
-  <div class="right-side__content">
-    {{{ messageList }}}
-  </div>
-  <div class="right-side__footer">
-    {{{ MessageField }}}
-  </div>
+    <div class="right-side__footer">
+      {{{ MessageField }}}
+    </div>
+  {{else}}
+    <h1 class="right-side__no-chat">Нет активного чата</h1>
+  {{/if}}
 </div>

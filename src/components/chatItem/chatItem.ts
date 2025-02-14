@@ -1,21 +1,24 @@
 import Block from '../../core/block.ts'
 import { Avatar } from '../avatar'
 import template from './template.hbs?raw'
-import { store } from '../../core/store.ts'
 import { UserType } from '../../types'
 
 export interface ChatItemProps {
   id: number
   title: string
   time: string
-  content: string
   avatar?: string
-  unread_count
-  isOwnMessage: boolean
+  unread_count: number
+  created_by: number
   active: boolean
   onClick?: (id: number) => void
   onRemove?: (index: number) => void
   selected?: boolean
+  last_message: {
+    user: Partial<UserType>
+    time: string
+    content: string
+  }
 }
 
 export default class ChatItem extends Block {
@@ -43,7 +46,6 @@ export default class ChatItem extends Block {
   componentDidUpdate(_: ChatItemProps, newProps: ChatItemProps): boolean {
     const element = this.getContent() as HTMLElement
     if (newProps.active) {
-      console.log(this.props.id)
       element?.classList?.add('selected')
     } else {
       element?.classList?.remove('selected')

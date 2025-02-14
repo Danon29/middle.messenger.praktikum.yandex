@@ -5,28 +5,28 @@ import { UserType } from '../types'
 class ChatController {
   private sockets: { [chatId: number]: WebSocket } = {}
   public getChats() {
-    return chatAPI.getChats().then((data) => console.log(JSON.stringify(data)))
+    return chatAPI.getChats()
   }
 
   public createChat(title: string) {
     return chatAPI
       .createChat({ title })
       .then(() => this.getChats())
-      .catch((err) => console.log('Ошибка при создании чата'))
+      .catch((err) => console.log('Ошибка при создании чата', err))
   }
 
   public deleteChat(chatId: number) {
     return chatAPI
       .deleteChat({ chatId })
       .then(() => this.getChats())
-      .catch((err) => console.log('Ошибка при удалении чата'))
+      .catch((err) => console.log('Ошибка при удалении чата', err))
   }
 
   public addUserToChat(chatId: number, users: number[]) {
     return chatAPI
       .addUserToChat({ users, chatId })
       .then(() => `Чат успешно обновлен`)
-      .catch((err) => console.log('Ошибка при добавлении пользователей'))
+      .catch((err) => console.log('Ошибка при добавлении пользователей', err))
   }
 
   public removeUserFromChat(chatId: number, users: number[]) {
@@ -44,10 +44,11 @@ class ChatController {
         store.setState(`token_${chatId}`, token)
         return token
       })
-      .catch((err) => console.log('Ошибка при получении токена'))
+      .catch((err) => console.log('Ошибка при получении токена', err))
   }
 
   public connectToChat(chatId: number) {
+    console.log(this.sockets)
     this.getChatToken(chatId)
       .then((token) => {
         const userId = (store.getState().user as UserType).id
