@@ -3,10 +3,19 @@ import { Button } from '../../../components'
 import { TProps } from '../../../types'
 import template from '../template.hbs?raw'
 import '../error.scss'
+import { router } from '../../../core/Router.ts'
+import { authController } from '../../../controllers/authController.ts'
 
 export default class ClientError extends Block {
   constructor(props: TProps) {
-    const button = new Button({ type: 'primary', label: 'Домой' })
+    const button = new Button({
+      type: 'primary',
+      label: 'Домой',
+      onClick: async () => {
+        const isAuthed = await authController.getUserIsAuthed()
+        router.go(isAuthed ? '/messenger' : '/sign-in')
+      }
+    })
 
     super('main', {
       ...props,

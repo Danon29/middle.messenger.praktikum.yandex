@@ -111,7 +111,7 @@ export default class Router {
     let route = this.getRoute(pathname)
     if (!route) {
       if (this._currentRoute) this._currentRoute.leave()
-      route = this.getRoute('/errorPage404')
+      route = this.getRoute('/client-error')
     }
 
     if (this._currentRoute && this._currentRoute !== route) {
