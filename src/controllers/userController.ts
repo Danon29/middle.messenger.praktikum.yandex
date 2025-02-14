@@ -22,8 +22,7 @@ class UserController {
       const formData = new FormData()
       formData.append('avatar', file)
 
-      await userAPI.updateUserAvatar(formData as FormData)
-      console.log('Успешно')
+      return await userAPI.updateUserAvatar(formData as FormData)
     } catch (err) {
       console.log(err)
     }

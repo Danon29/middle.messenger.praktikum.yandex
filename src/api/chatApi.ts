@@ -1,10 +1,11 @@
 import { httpTransport } from '../core/http/httpTransport.ts'
+import { baseURL } from '../consts'
 
-const baseURL = 'https://ya-praktikum.tech/api/v2/chats'
+const baseUrl = `${baseURL}/chats`
 
 class ChatAPI {
   public getChats() {
-    return httpTransport.get(`${baseURL}/`, {
+    return httpTransport.get(`${baseUrl}/`, {
       withCredentials: true,
       headers: {
         'content-type': 'application/json'
@@ -13,7 +14,7 @@ class ChatAPI {
   }
 
   createChat(data: { title: string }) {
-    return httpTransport.post(`${baseURL}/`, {
+    return httpTransport.post(`${baseUrl}/`, {
       withCredentials: true,
       headers: {
         'content-type': 'application/json'
@@ -23,7 +24,7 @@ class ChatAPI {
   }
 
   deleteChat(data: { chatId: number }) {
-    return httpTransport.delete(`${baseURL}/`, {
+    return httpTransport.delete(`${baseUrl}/`, {
       withCredentials: true,
       headers: {
         'content-type': 'application/json'
@@ -33,7 +34,7 @@ class ChatAPI {
   }
 
   addUserToChat(data: { users: number[]; chatId: number }) {
-    return httpTransport.put(`${baseURL}/users`, {
+    return httpTransport.put(`${baseUrl}/users`, {
       withCredentials: true,
       headers: {
         'content-type': 'application/json'
@@ -43,7 +44,7 @@ class ChatAPI {
   }
 
   removeUserFromChat(data: { users: number[]; chatId: number }) {
-    return httpTransport.delete(`${baseURL}/users`, {
+    return httpTransport.delete(`${baseUrl}/users`, {
       withCredentials: true,
       headers: {
         'content-type': 'application/json'
@@ -53,7 +54,7 @@ class ChatAPI {
   }
 
   getChatToken(chatId: number) {
-    return httpTransport.post(`${baseURL}/token/${chatId}`, {
+    return httpTransport.post(`${baseUrl}/token/${chatId}`, {
       withCredentials: true,
       headers: {
         'content-type': 'application/json'

@@ -164,9 +164,11 @@ export default class MainPage extends Block {
             type: 'primary',
             submit: false,
             onClick: async () => {
-              const chatId = this.props.currentChat.id
-              const inputValue = (this.children.modalWindow as any).children?.Content?.children?.Input?._element?.value
-              if (inputValue && chatId)
+              const chatId = this.props.currentChat
+              const inputValue = Number(
+                (this.children.modalWindow as any).children?.Content?.children?.Input?._element?.value
+              )
+              if (inputValue && chatId && !isNaN(inputValue))
                 await chatController
                   .addUserToChat(chatId, [inputValue])
                   .then(() => this.setProps({ isModalOpen: false }))
@@ -186,9 +188,11 @@ export default class MainPage extends Block {
             type: 'primary',
             submit: false,
             onClick: async () => {
-              const chatId = this.props.currentChat.id
-              const inputValue = (this.children.modalWindow as any).children?.Content?.children?.Input?._element?.value
-              if (inputValue && chatId)
+              const chatId = this.props.currentChat
+              const inputValue = Number(
+                (this.children.modalWindow as any).children?.Content?.children?.Input?._element?.value
+              )
+              if (inputValue && chatId && !isNaN(inputValue))
                 await chatController
                   .removeUserFromChat(chatId, [inputValue])
                   .then(() => this.setProps({ isModalOpen: false }))
@@ -231,8 +235,6 @@ export default class MainPage extends Block {
         }
     }
   }
-
-  updateChatList() {}
 
   render() {
     return this.compile(template as string, { ...this.props, modalWindow: this.children.modalWindow })

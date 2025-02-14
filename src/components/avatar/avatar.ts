@@ -1,5 +1,6 @@
 import Block from '../../core/block.ts'
 import template from './template.hbs?raw'
+import { baseURL } from '../../consts'
 
 interface AvatarProps {
   size: 'big' | 'small' | 'medium'
@@ -17,7 +18,8 @@ export default class Avatar extends Block {
         click: (e: MouseEvent) => {
           if (props.onClick) props.onClick(e)
         }
-      }
+      },
+      baseURL: baseURL
     })
   }
 

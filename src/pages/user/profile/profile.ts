@@ -15,7 +15,6 @@ export interface UserPageProps {
   formState?: { [key: string]: string }
   errors?: { [key: string]: string }
   user?: {
-    // Добавляем user в пропсы
     first_name: string
     second_name: string
     display_name: string
@@ -59,9 +58,17 @@ export default class UserPage extends Block {
           onClick: async () => {
             if (this.props.selectedFile) {
               try {
-                await userController.updateAvatar(this.props.selectedFile)
-                console.log('Аватар успешно загружен')
-                this.setProps({ isModalOpen: false, selectedFile: null }) // Закрываем модалку и очищаем файл
+                const res = await userController.updateAvatar(this.props.selectedFile)
+                if (res) {
+                  const newAvatar = JSON.parse(res.responseText).avatar
+                  if (newAvatar) {
+                    store.setState('user', { ...store.getState().user, avatar: newAvatar })
+                    this.children.Form = this.getFormData(false, { ...this.props.user, avatar: newAvatar })
+                    this.eventBus().emit(Block.EVENTS.FLOW_CDU)
+                  }
+                  console.log('Аватар успешно загружен')
+                  this.setProps({ isModalOpen: false, selectedFile: null })
+                }
               } catch (error) {
                 console.error('Ошибка загрузки аватара:', error)
               }

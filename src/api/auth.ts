@@ -1,11 +1,12 @@
 import { httpTransport } from '../core/http/httpTransport.ts'
 import { UserType } from '../types'
+import { baseURL } from '../consts'
 
-const baseURL = 'https://ya-praktikum.tech/api/v2/auth'
+const baseUrl = `${baseURL}/auth`
 
 class AuthAPI {
   public getUserInfo() {
-    return httpTransport.get(`${baseURL}/user`, {
+    return httpTransport.get(`${baseUrl}/user`, {
       withCredentials: true,
       headers: {
         'content-type': 'application/json'
@@ -14,7 +15,7 @@ class AuthAPI {
   }
 
   public login(data: Pick<UserType, 'login' | 'password'>) {
-    return httpTransport.post(`${baseURL}/signin`, {
+    return httpTransport.post(`${baseUrl}/signin`, {
       withCredentials: false,
       headers: {
         'content-type': 'application/json'
@@ -24,7 +25,7 @@ class AuthAPI {
   }
 
   public register(data: UserType) {
-    return httpTransport.post(`${baseURL}/signup`, {
+    return httpTransport.post(`${baseUrl}/signup`, {
       withCredentials: true,
       headers: {
         'content-type': 'application/json'
@@ -34,7 +35,7 @@ class AuthAPI {
   }
 
   public logout() {
-    return httpTransport.post(`${baseURL}/logout`, {
+    return httpTransport.post(`${baseUrl}/logout`, {
       withCredentials: true,
       headers: {
         'content-type': 'application/json'

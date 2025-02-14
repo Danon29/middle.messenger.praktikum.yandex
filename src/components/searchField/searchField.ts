@@ -18,7 +18,10 @@ export default class SearchField extends Block {
       SearchButton: new IconButton({ kind: 'search', onClick: (e) => console.log(e) }),
       InputSearch: new SearchInput({
         placeholder: props.placeholder
-      })
+      }),
+      events: {
+        submit: (e: SubmitEvent) => e.preventDefault()
+      }
     })
   }
 

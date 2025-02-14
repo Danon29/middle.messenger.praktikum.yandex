@@ -6,10 +6,12 @@ import { router } from '../../core/Router.ts'
 import { connect } from '../../core/HOC.ts'
 import { store } from '../../core/store.ts'
 import { UserType } from '../../types'
+import { InputFieldProps } from '../inputField/inputField.ts'
+import { ButtonProps } from '../button/button.ts'
 
 interface UserPageProps {
-  inputs: any[]
-  buttons: any[]
+  inputs: InputFieldProps[]
+  buttons: ButtonProps[]
   onSubmit?: (e: Event) => void
   userName?: string
   onAvatarClick?: (e: MouseEvent) => void
