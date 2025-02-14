@@ -77,7 +77,7 @@ export default class MainPage extends Block {
       SearchField: new SearchField({ type: 'search', placeholder: 'Поиск' }),
       MessageField: new MessageField({ placeholder: 'Введите сообщение' }),
       ChatsList: new ChatList({ chats: [] }),
-      FriendsAvatar: new Avatar({ size: 'medium', clickable: false }),
+      ChatAvatar: new Avatar({ size: 'medium', clickable: false }),
       chatTitle: getChatTitle(),
       messageList: new MessageList({}),
       modalWindow: null
@@ -92,7 +92,8 @@ export default class MainPage extends Block {
         isOwnMessage: true,
         active: false,
         id: chat.id,
-        onClick: this.setCurrentChat.bind(this)
+        onClick: this.setCurrentChat.bind(this),
+        avatar: chat.avatar ?? ''
       }))
       store.setState('chats', newChats)
 
@@ -111,6 +112,8 @@ export default class MainPage extends Block {
     store.setState('currentChat', currentChat.id)
     this.setProps({ currentChat: currentChat.id })
     chatController.connectToChat(id)
+    this.children.ChatAvatar = new Avatar({ size: 'medium', clickable: false, imageUrl: currentChat.avatar })
+    this.eventBus().emit('flow:component-did-update')
   }
 
   getModalProps(type: string) {
