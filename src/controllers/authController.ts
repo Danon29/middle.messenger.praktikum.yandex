@@ -36,14 +36,14 @@ class AuthController {
   public async register(data: UserType) {
     return authAPI
       .register(data)
-      .then(() => router.go('/sign-in'))
+      .then(() => router.go('/'))
       .catch((err) => console.log(err))
   }
 
   public async logout() {
     try {
       await authAPI.logout()
-      router.go('/sign-in')
+      router.go('/')
     } catch (err) {
       console.log(err)
     }

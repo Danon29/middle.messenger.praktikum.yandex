@@ -29,7 +29,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   router
     .use('/client-error', connect(ClientError as unknown as typeof Block))
     .use('/server-error', connect(ServerError as unknown as typeof Block))
-    .use('/sign-in', connect(LoginPage as unknown as typeof Block))
+    .use('/', connect(LoginPage as unknown as typeof Block))
     .use('/sign-up', connect(RegisterPage as unknown as typeof Block))
     .use('/messenger', connect(MainPage as unknown as typeof Block))
     .use('/settings', connect(ProfilePage as unknown as typeof Block))
@@ -40,10 +40,10 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   if (!isAuthed)
     if (currentPath === '/messenger' || currentPath === '/settings' || currentPath === '/settings/edit-password')
-      router.go('/sign-in')
+      router.go('/')
 
   if (isAuthed) {
-    if (currentPath === '/sign-in' || currentPath === '/sign-up') router.go('/messenger')
+    if (currentPath === '/' || currentPath === '/sign-up') router.go('/messenger')
   }
 })
 
@@ -53,12 +53,12 @@ window.addEventListener('popstate', async () => {
 
   if (!isAuthed) {
     if (currentPath === '/' || currentPath.startsWith('/settings')) {
-      router.go('/sign-in')
+      router.go('/')
     }
   }
 
   if (isAuthed) {
-    if (currentPath === '/sign-in' || currentPath === '/sign-up') {
+    if (currentPath === '/' || currentPath === '/sign-up') {
       router.go('/messenger')
     }
   }

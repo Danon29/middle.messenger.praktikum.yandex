@@ -55,7 +55,7 @@ const buttons: ButtonProps[] = [
   {
     label: 'Войти',
     type: 'link',
-    onClick: () => router.go('/sign-in')
+    onClick: () => router.go('/')
   }
 ]
 

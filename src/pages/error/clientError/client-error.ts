@@ -13,14 +13,14 @@ export default class ClientError extends Block {
       label: 'Домой',
       onClick: async () => {
         const isAuthed = await authController.getUserIsAuthed()
-        router.go(isAuthed ? '/messenger' : '/sign-in')
+        router.go(isAuthed ? '/messenger' : '/')
       }
     })
 
     super('main', {
       ...props,
       className: 'error',
-      infoMessage: 'Информация',
+      infoMessage: 'Страница не найдена',
       errorCode: '404',
       LabelButton: button
     })
