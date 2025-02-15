@@ -1,5 +1,5 @@
 .message {
-  max-width: 100%;
+  max-width: 50rem;
   color: white;
   word-break: break-word;
   white-space: pre-wrap;
@@ -9,6 +9,7 @@
   margin: 1rem 2rem 0;
   padding: 1.5rem;
   display: flex;
+  min-width: 8rem;
 
   &__text {
     font-size: 1.2rem;

@@ -7,5 +7,12 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist'
+  },
+  resolve: {
+    alias: {
+      '@': '/src',
+      '@components': '/src/components',
+      '@icons': '/public/icons'
+    }
   }
 })

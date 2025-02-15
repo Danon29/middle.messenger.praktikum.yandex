@@ -19,7 +19,6 @@
 
   .left-side__header {
     height: 15%;
-    border-bottom: 1px solid #5e5b5b;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -29,6 +28,13 @@
       width: 100%;
       padding: 0 5px;
     }
+  }
+
+  .left-side__create-chat-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.6rem 0;
   }
 }
 
@@ -67,12 +73,14 @@
     .right-side__user-button {
       position: relative;
       margin-right: 10px;
-      border-radius: 50%;
       transition: 0.2s;
+      display: flex;
 
-      &:hover {
+      > * :hover {
         background-color: #4a4570;
+        border-radius: 50%;
       }
+
 
       .user-menu-container {
         position: absolute;
@@ -97,5 +105,14 @@
       left: 0.5rem;
       top: -11rem;
     }
+  }
+
+  .right-side__no-chat {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 3rem;
+    color: white;
   }
 }

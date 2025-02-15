@@ -1,17 +1,23 @@
 import Block from '../../core/block'
 
-import ArrowRightSVG from '../../../public/icons/arrow.svg?raw'
-import ArrowLeftSVG from '../../../public/icons/arrowLeft.svg?raw'
-import Clip from '../../../public/icons/clip.svg?raw'
-import Search from '../../../public/icons/search.svg?raw'
-import Info from '../../../public/icons/info.svg?raw'
+import ArrowRightSVG from '@icons/arrow.svg?raw'
+import ArrowLeftSVG from '@icons/arrowLeft.svg?raw'
+import Clip from '@icons/clip.svg?raw'
+import Search from '@icons/search.svg?raw'
+import Info from '@icons/info.svg?raw'
+import Add from '@icons/add.svg?raw'
+import Remove from '@icons/remove.svg?raw'
+import Delete from '@icons/delete.svg?raw'
 
 const ICONS_SVG_SOURCE = {
   arrowRight: ArrowRightSVG,
   arrowLeft: ArrowLeftSVG,
   clip: Clip,
   search: Search,
-  info: Info
+  info: Info,
+  add: Add,
+  remove: Remove,
+  delete: Delete
 } as const
 
 interface IconButtonProps {
@@ -31,13 +37,9 @@ export default class IconButton extends Block {
     })
   }
 
-  render(): string {
+  render() {
     const svgSource = ICONS_SVG_SOURCE[this.props.kind as keyof typeof ICONS_SVG_SOURCE]
 
-    if (typeof svgSource !== 'string') {
-      return ''
-    }
-
-    return svgSource
+    return this.compile(svgSource as string, this.props)
   }
 }

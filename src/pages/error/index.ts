@@ -1,2 +1,2 @@
-import './error.scss'
-export { default as ErrorPage } from './error'
+export { ClientError } from './clientError'
+export { ServerError } from './server-error'

@@ -1,17 +1,24 @@
 import Block from '../../core/block.ts'
 import { Avatar } from '../avatar'
+import template from './template.hbs?raw'
+import { UserType } from '../../types'
 
 export interface ChatItemProps {
-  name: string
+  id: number
+  title: string
   time: string
-  text: string
-  isOwnMessage: boolean
+  avatar?: string
+  unread_count: number
+  created_by: number
   active: boolean
-  onClick?: () => void
-  onRemove?: () => void
-  count?: number
-  imageUrl?: string
+  onClick?: (id: number) => void
+  onRemove?: (index: number) => void
   selected?: boolean
+  last_message: {
+    user: Partial<UserType>
+    time: string
+    content: string
+  }
 }
 
 export default class ChatItem extends Block {
@@ -20,14 +27,19 @@ export default class ChatItem extends Block {
       ...props,
       className: `chat-item${props.active ? ' selected' : ''}`,
       events: {
-        click: props.onClick
+        click: () => {
+          if (props.onClick) {
+            props.onClick(props.id)
+          }
+        }
       },
       UserAvatar: new Avatar({
         size: 'small',
-        imageUrl: props.imageUrl,
+        imageUrl: props.avatar,
         clickable: false,
         onClick: () => console.log('changed avatar')
-      })
+      }),
+      handleRemove: props.onRemove
     })
   }
 
@@ -41,34 +53,7 @@ export default class ChatItem extends Block {
     return true
   }
 
-  render(): string {
-    return `
-      <div class="chat-item__avatar">
-          {{{ UserAvatar }}}
-      </div>
-      <div class="chat-item__content">
-          <div class="chat-item__header">
-              <span class="chat-item__name">{{name}}</span> 
-              <div class="chat-item__infoPart">
-                  <span class="chat-item__time">{{time}}</span>
-                  <button class="chat-item__deleteBtn">
-                      <span class="chat-item__deleteLine"></span>
-                      <span class="chat-item__deleteLine"></span>
-                  </button>
-              </div>
-          </div>
-          <div class="chat-item__body">
-              <div class="chat-item__bodyText">
-                  {{#if isOwnMessage }}
-                      <span class="chat-item__ownPrefix">Вы:</span>
-                  {{/if}}
-                  <span class="chat-item__text">{{text}}</span>
-              </div>
-              {{#if count }}
-                  <div class="chat-item__unreadCount">{{count}}</div>
-              {{/if}}
-          </div>
-      </div>
-    `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

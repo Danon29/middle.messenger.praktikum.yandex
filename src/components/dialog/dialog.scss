@@ -1,14 +1,13 @@
 .dialog-container {
   height: 100%;
   width: 100%;
-  position: fixed;
+  position: absolute;
   background: rgb(21 30 35 / 70%);
-  top: 0;
-  left: 0;
+  z-index: 999;
 }
 
-.dialog {
-  position: fixed;
+dialog {
+  position: absolute;
   background-color: var(--primary);
   top: 50%;
   left: 50%;
@@ -43,6 +42,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 1rem;
 
     &:first-child {
       padding-bottom: 20px;

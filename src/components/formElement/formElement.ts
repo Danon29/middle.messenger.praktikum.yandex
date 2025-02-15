@@ -1,12 +1,14 @@
 import Block from '../../core/block.ts'
-import { InputFieldProps } from '../input/inputField.ts'
-import { ButtonProps } from '../button/button.ts'
+
+import template from './template.hbs?raw'
+import { InputField } from '../inputField'
+import { Button } from '../button'
 
 interface FormProps {
   title: string
-  inputs: InputFieldProps[] | string
-  buttons: ButtonProps[] | string
-  onSubmit: (e: Event) => void
+  inputs: InputField[]
+  buttons: Button[]
+  events?: Record<string, unknown>
 }
 
 export default class Form extends Block {
@@ -17,19 +19,7 @@ export default class Form extends Block {
     })
   }
 
-  render(): string {
-    return `
-      <div class="${this.props.className}">
-        <h1 class="form__title">${this.props.title}</h1>
-        <form class="form__element" onsubmit="${this.props.onSubmit}">
-          <div class="form__inputs">
-              ${this.props.inputs}
-          </div>
-          <div class="form__buttons">
-              ${this.props.buttons}
-          </div>
-        </form>
-      </div>
-    `
+  render() {
+    return this.compile(template as string, this.props)
   }
 }

@@ -4,6 +4,10 @@ import Handlebars from 'handlebars'
 import FormValidator from '../utils/validator/FormValidator.ts'
 import { InputField } from '../components'
 
+type ObjectType = {
+  [key: string]: string
+}
+
 export default class Block {
   static EVENTS = {
     INIT: 'init',
@@ -12,13 +16,14 @@ export default class Block {
     FLOW_RENDER: 'flow:render'
   } as const
 
-  private _element: HTMLElement | null = null
+  public _element: HTMLElement | null = null
   private _meta: { tagName: string; props: Record<string, any> } | null = null
-  private _id = nanoid(6)
-  protected eventBus: () => EventBus<string>
-  protected children: Record<string, Block | Block[]>
+  public id = nanoid(6)
+  protected eventBus: () => EventBus
+  public children: Record<string, Block | Block[]>
   public props: Record<string, any>
   protected validator: FormValidator | null = null
+  public template: string = ''
 
   protected selfCheck: boolean
 
@@ -50,7 +55,7 @@ export default class Block {
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  _registerEvents(eventBus: EventBus<string>) {
+  _registerEvents(eventBus: EventBus) {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this))
@@ -87,13 +92,17 @@ export default class Block {
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        value.forEach((obj) => {
-          if (obj instanceof Block) {
-            children[key] = value
-          } else {
-            props[key] = value
-          }
-        })
+        if (value.length === 0) {
+          props[key] = value
+        } else {
+          value.forEach((obj) => {
+            if (obj instanceof Block) {
+              children[key] = value
+            } else {
+              props[key] = value
+            }
+          })
+        }
         return
       }
       if (value instanceof Block) {
@@ -116,14 +125,13 @@ export default class Block {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
   }
 
-  // Не представляю как типизировать пропсы для разных компонентов, включая дочерних
   //@ts-ignore
   _componentDidUpdate(oldProps, newProps) {
     const response = this.componentDidUpdate(oldProps, newProps)
-    if (!response) {
-      return
+
+    if (response) {
+      this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
     }
-    this._render()
   }
 
   //@ts-ignore
@@ -133,7 +141,7 @@ export default class Block {
   }
 
   //@ts-ignore
-  setProps = (nextProps) => {
+  public setProps = (nextProps) => {
     if (!nextProps) {
       return
     }
@@ -156,6 +164,20 @@ export default class Block {
     })
   }
 
+  _addAttributes() {
+    const { attr = {} } = this.props
+
+    if (this.props.withInternalId) {
+      this._element?.setAttribute('data-id', this.id)
+    }
+
+    Object.entries(attr as ObjectType).forEach(([key, value]) => {
+      if (this._element) {
+        this._element.setAttribute(key, value as string)
+      }
+    })
+  }
+
   _removeEvents() {
     const { events = {} } = this.props
 
@@ -167,59 +189,72 @@ export default class Block {
     })
   }
 
-  _compile() {
-    const propsAndStubs = { ...this.props }
+  compile(template: string, props: any) {
+    const propsAndStubs = { ...props }
 
     Object.entries(this.children).forEach(([key, child]) => {
       if (Array.isArray(child)) {
-        propsAndStubs[key] = child.map((component) => `<div data-id="${component._id}"></div>`)
+        propsAndStubs[key] = child
+          .map((component) => {
+            return `<div data-id="${component.id}"></div>`
+          })
+          .join('')
       } else {
-        propsAndStubs[key] = `<div data-id="${child._id}"></div>`
+        propsAndStubs[key] = `<div data-id="${child.id}"></div>`
       }
     })
 
     const fragment = this._createDocumentElement('template') as HTMLTemplateElement
-    const template = Handlebars.compile(this.render())
-    fragment.innerHTML = template(propsAndStubs)
+    const compiledTemplate = Handlebars.compile(template)
+    fragment.innerHTML = compiledTemplate(propsAndStubs)
 
     Object.values(this.children).forEach((child) => {
       if (Array.isArray(child)) {
         child.forEach((component) => {
           if ('content' in fragment) {
-            const stub = fragment.content.querySelector(`[data-id="${component._id}"]`)
-            stub?.replaceWith(component.getContent() as HTMLElement)
+            const stub = fragment.content.querySelector(`[data-id="${component.id}"]`)
+            if (stub) {
+              stub.replaceWith(component.getContent() as HTMLElement)
+            }
           }
         })
       } else {
         if ('content' in fragment) {
-          const stub = fragment.content.querySelector(`[data-id="${child._id}"]`)
-          stub?.replaceWith(child.getContent() as HTMLElement)
+          const stub = fragment.content.querySelector(`[data-id="${child.id}"]`)
+          if (stub) {
+            stub.replaceWith(child.getContent() as HTMLElement)
+          }
         }
       }
     })
-
     return fragment.content
   }
 
   _render() {
     this._removeEvents()
-    const block = this._compile()
+    const block = this.render()
 
-    if (this._element?.children.length === 0) {
-      this._element!.appendChild(block)
-    } else {
-      this._element!.replaceChildren(block)
+    if (typeof block !== 'string') {
+      if (this._element?.children.length === 0) {
+        this._element!.appendChild(block)
+      } else {
+        this._element!.replaceChildren(block)
+      }
+
+      this._addEvents()
+      this._addAttributes()
     }
-
-    this._addEvents()
   }
 
-  render() {
-    return ''
+  render(): Node | string {
+    return this.compile(this._meta?.tagName ?? '', this.props)
   }
 
-  getContent() {
-    return this.element
+  public getContent(): HTMLElement {
+    if (!this._element) {
+      throw new Error('Element is not created')
+    }
+    return this._element
   }
 
   //@ts-ignore
@@ -235,7 +270,6 @@ export default class Block {
       set(target, prop, value) {
         const oldTarget = { ...target }
         target[prop] = value
-
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
         emitBind(Block.EVENTS.FLOW_CDU, oldTarget, target)
@@ -253,15 +287,15 @@ export default class Block {
     return document.createElement(tagName)
   }
 
-  // show() {
-  //   const content = this.getContent()
-  //   if (content) content.style.display = 'block'
-  // }
-  //
-  // hide() {
-  //   const content = this.getContent()
-  //   if (content && content.style) content.style.display = 'none'
-  // }
+  show() {
+    const content = this.getContent()
+    if (content) content.style.display = 'block'
+  }
+
+  hide() {
+    const content = this.getContent()
+    if (content && content.style) content.style.display = 'none'
+  }
 
   protected handleInputChange(event: Event): void {
     const { name, value } = event.target as HTMLInputElement
@@ -280,11 +314,16 @@ export default class Block {
     const errorMessage = this.validator?.getErrors()[name] || ''
 
     if (this.selfCheck) this.setProps({ errorMessage })
-    else (this.children.inputs as InputField[]).find((input) => input.props.name === name)?.setProps({ errorMessage })
+    else
+      ((this.children.Form as Block).children.inputs as InputField[])
+        .find((input) => input.props.name === name)
+        ?.setProps({ errorMessage })
   }
 
-  protected handleSubmit(event: Event): void {
-    event.preventDefault()
+  protected handleSubmit(event: Event) {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault()
+    }
     this.validator?.updateFormState(this.props.formState)
 
     const isValid = this.validator?.validateForm()
@@ -294,12 +333,16 @@ export default class Block {
 
     if (isValid) {
       console.log(this.props.formState)
+      return true
     } else {
       Object.entries(errors).forEach(([key, errorMessage]) => {
         if (this.selfCheck) this.setProps({ errorMessage })
         else
-          (this.children.inputs as InputField[]).find((input) => input.props.name === key)?.setProps({ errorMessage })
+          ((this.children.Form as Block).children.inputs as InputField[])
+            .find((input) => input.props.name === key)
+            ?.setProps({ errorMessage })
       })
+      return false
     }
   }
 }

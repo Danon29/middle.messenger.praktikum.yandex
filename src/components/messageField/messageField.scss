@@ -20,7 +20,17 @@
     box-shadow: 0 0 0 2px #9372ee;
   }
 
-  textarea {
+  .wrapper {
+    display: flex;
+    width: 100%;
+  }
+
+  label {
+    visibility: hidden;
+    position: absolute;
+  }
+
+  .textArea {
     font-family: 'Proxima Nova', sans-serif;
     letter-spacing: -0.2px;
     font-size: 20px;
