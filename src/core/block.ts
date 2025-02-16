@@ -1,8 +1,8 @@
-import EventBus from './eventBus'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
 import FormValidator from '../utils/validator/FormValidator.ts'
 import { InputField } from '../components'
+import EventBus from './eventBus.ts'
 
 type ObjectType = {
   [key: string]: string
