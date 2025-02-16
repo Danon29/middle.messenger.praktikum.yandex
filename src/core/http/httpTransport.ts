@@ -1,3 +1,5 @@
+import queryStringify from '../../utils/queryStringify.ts'
+
 export const METHODS = {
   GET: 'GET',
   POST: 'POST',
@@ -8,17 +10,19 @@ export const METHODS = {
 interface HttpOptions {
   timeout?: number
   headers?: Record<string, string>
-  data?: string | FormData
+  data?: any
   withCredentials?: boolean
 }
 
 type HttpRequest = (url: string, options: HttpOptions) => Promise<XMLHttpRequest>
 
 export class HTTPTransport {
-  private _websocket: WebSocket | null = null
-
-  get: HttpRequest = (url, options = { timeout: 5000 }) => {
-    return this.request(url, { ...options, method: METHODS.GET }, options.timeout ?? 5000)
+  get: HttpRequest = (url, options: HttpOptions = { timeout: 5000 }) => {
+    return this.request(
+      `${url}${options.data ? queryStringify(options.data) : ''}`,
+      { ...options, method: METHODS.GET },
+      options.timeout ?? 5000
+    )
   }
 
   post: HttpRequest = (url, options = { timeout: 5000 }) => {
@@ -60,7 +64,8 @@ export class HTTPTransport {
 
       xhr.onload = function () {
         if (xhr.status >= 400) {
-          reject(new Error(`HTTP Error: ${xhr.status}`))
+          const errorMessage = `Request failed with status ${xhr.status}, ${JSON.parse(xhr.response)?.reason}`
+          reject(new Error(errorMessage))
         } else {
           resolve(xhr)
         }
@@ -78,44 +83,6 @@ export class HTTPTransport {
         xhr.send(data)
       }
     })
-  }
-
-  webSocketConnect(url: string) {
-    this._websocket = new WebSocket(url) as WebSocket
-
-    this._websocket.onopen = () => {
-      console.log('Соединение установлено')
-    }
-
-    this._websocket.onclose = (event) => {
-      if (event.wasClean) {
-        console.log('Соединение закрыто чисто')
-      } else {
-        console.log('Обрыв соединения')
-      }
-    }
-
-    this._websocket.onmessage = (event) => {
-      console.log(event.data)
-    }
-
-    this._websocket.onerror = (err) => {
-      console.log(`Websocket error: ${err}`)
-    }
-  }
-
-  webSocketSendMessage(data: string | ArrayBuffer | Blob | ArrayBufferView) {
-    if (!this._websocket || this._websocket.readyState !== WebSocket.OPEN) {
-      throw new Error('WebSocket соединение не установлено')
-    }
-    this._websocket.send(data)
-  }
-
-  closeWebSocket(code: number, reason: string) {
-    if (this._websocket) {
-      this._websocket.close(code, reason)
-      this._websocket = null
-    }
   }
 }
 
