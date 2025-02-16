@@ -18,7 +18,7 @@
     "prettier:fix": "prettier --write src",
     "lint:ts": "tsc --noEmit",
     "test": "mocha",
-    "precommit": "npm run test && npm run lint && npm run lint:ts && npm run prettier",
+    "precommit": "npm run test && npm run lint && npm run lint:ts && npm run prettier && echo 'All checks passed!'",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -35,7 +35,7 @@
     "eslint-define-config": "^2.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "globals": "^15.12.0",
-    "husky": "^9.1.7",
+    "husky": "^8.0.0",
     "jsdom": "^26.0.0",
     "mocha": "^11.1.0",
     "prettier": "^3.3.3",
@@ -54,7 +54,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && npm run lint:ts"
+      "pre-commit": "npm run test && npm run lint && npm run lint:ts && npm run prettier && echo 'All checks passed!'"
     }
   }
 }
